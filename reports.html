@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reports</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin:0; font-family:'Poppins', sans-serif; background:#fdfaf6; }
+    .header { background:#f5c542; border:3px solid #4b0082; padding:12px 20px; font-weight:700; display:flex; justify-content:space-between; }
+    .wrap { padding:16px; max-width:1100px; margin:0 auto; }
+    .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+    .controls input, .controls select { padding:8px; border:1px solid #d46a6a; border-radius:6px; font-family:'Poppins', sans-serif; }
+    .btn { padding:8px 12px; background:#e62222; color:#fff; border:2px solid #000; font-weight:700; cursor:pointer; box-shadow:3px 3px 0 #000; }
+    .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:10px; }
+    .card { background:#fff; border:1px solid #d46a6a; border-radius:8px; padding:12px; }
+    .grid { width:100%; border-collapse:collapse; margin-top:12px; }
+    .grid th, .grid td { border:1px solid #ddd; padding:8px; font-size:12px; }
+    .muted { color:#666; font-size:12px; }
+
+    /* Loading Bar CSS */
+    #loading-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background-color: black;
+        z-index: 9999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+    }
+    #loading-bar.show {
+        transform: translateX(0);
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-bar"></div>
+  <div class="header">
+    <div>Reports</div>
+    <div id="centreName">Centre</div>
+  </div>
+  <div class="wrap">
+    <div class="controls">
+      <input type="date" id="from" />
+      <input type="date" id="to" />
+      <input type="text" id="employee" placeholder="Employee Code (optional)" />
+      <button class="btn" id="btnRun">Run</button>
+      <span class="muted" id="status"></span>
+    </div>
+    <div class="cards">
+      <div class="card"><div>Total Actions Assigned</div><div id="c_assigned" style="font-size:24px; font-weight:700;">-</div></div>
+      <div class="card"><div>Total Actions Taken</div><div id="c_taken" style="font-size:24px; font-weight:700;">-</div></div>
+      <div class="card"><div>Actions Not Taken</div><div id="c_notTaken" style="font-size:24px; font-weight:700;">-</div></div>
+    </div>
+    <div class="card" style="margin-top:12px;">
+      <div style="font-weight:700; margin-bottom:6px;">By Disposition</div>
+      <table class="grid" id="tblDisp"><thead><tr><th>Disposition</th><th>Count</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="card" style="margin-top:12px;">
+      <div style="font-weight:700; margin-bottom:6px;">By Employee</div>
+      <table class="grid" id="tblEmp"><thead><tr><th>Employee</th><th>Count</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="card" style="margin-top:12px;">
+      <div style="font-weight:700; margin-bottom:6px;">By Date</div>
+      <table class="grid" id="tblDate"><thead><tr><th>Date</th><th>Count</th></tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function getQueryParam(name){ var p = new URLSearchParams(window.location.search); return p.get(name) || ''; }
+      var center = getQueryParam('center') || (function(){ try { return sessionStorage.getItem('center') || ''; } catch(_) { return ''; }})();
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbykJTJYdBcxr459wnO4kYLdAj7JezT-BcH3EaTAL5YGxHJIHn8mJxyIPA3eHLMAavCWNw/exec';
+      var cn = document.getElementById('centreName'); if (cn) cn.textContent = center || 'Centre';
+      var btn = document.getElementById('btnRun');
+      var statusEl = document.getElementById('status');
+
+      var loadingBar = document.getElementById('loading-bar');
+
+      function showLoadingBar() {
+          if (loadingBar) {
+              loadingBar.classList.add('show');
+          }
+      }
+
+      function hideLoadingBar() {
+          if (loadingBar) {
+              loadingBar.classList.remove('show');
+          }
+      }
+
+      function setStatus(s){ if (statusEl) statusEl.textContent = s || ''; }
+      function renderTable(tbodyEl, map){
+        var keys = Object.keys(map || {}).sort();
+        tbodyEl.innerHTML = keys.map(function(k){ return '<tr><td>'+ (k||'-') +'</td><td>'+ map[k] +'</td></tr>'; }).join('');
+      }
+      function run(){
+        var from = document.getElementById('from').value || '';
+        var to = document.getElementById('to').value || '';
+        var emp = document.getElementById('employee').value || '';
+        if (!center){ setStatus('Missing centre'); return; }
+        setStatus('Loading...');
+        showLoadingBar(); // Show loading bar
+        var url = API_BASE + '?action=report&center=' + encodeURIComponent(center) + (from ? '&from='+from : '') + (to ? '&to='+to : '') + (emp ? '&employeeCode='+encodeURIComponent(emp) : '');
+        fetch(url).then(function(r){ return r.json(); }).then(function(data){
+          hideLoadingBar(); // Hide loading bar
+          setStatus('');
+          document.getElementById('c_assigned').textContent = (data.assigned != null ? data.assigned : '-');
+          document.getElementById('c_taken').textContent = (data.taken != null ? data.taken : '-');
+          document.getElementById('c_notTaken').textContent = (data.notTaken != null ? data.notTaken : '-');
+          renderTable(document.querySelector('#tblDisp tbody'), data.byDisposition || {});
+          renderTable(document.querySelector('#tblEmp tbody'), data.byEmployee || {});
+          renderTable(document.querySelector('#tblDate tbody'), data.byDate || {});
+        }).catch(function(err){
+          hideLoadingBar(); // Hide loading bar on error
+          setStatus('Error loading report'); console.error(err); });
+      }
+      if (btn) btn.addEventListener('click', function(e){ e.preventDefault(); run(); });
+      // default: last 7 days
+      var d = new Date(); var to = d.toISOString().slice(0,10); d.setDate(d.getDate()-7); var from = d.toISOString().slice(0,10);
+      document.getElementById('from').value = from; document.getElementById('to').value = to;
+      run();
+    })();
+  </script>
+</body>
+</html>
+

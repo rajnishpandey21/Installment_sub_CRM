@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Physics Wallah - Admissions 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff; 
+    }
+
+    /* Header */
+    .header {
+      background: #f5c542;
+      color: black;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      border: 3px solid #4b0082;
+      font-size: 22px;
+    }
+
+    /* Main container */
+    .container {
+      display: flex;
+      padding: 15px;
+      gap: 15px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 30%;
+      flex-shrink: 0;
+    }
+
+    .box {
+      background: #d46a6a;
+      color: white;
+      padding: 8px 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* --- 3D BUTTON STYLES --- */
+    .act-btn {
+      font-size: 14px; /* Slightly smaller for better fit */
+      padding: 10px 20px;
+      background: #e62222;
+      color: white;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 2px solid black;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.1s ease-in-out;
+      box-shadow: 4px 4px 0px black;
+      flex-shrink: 0; /* Prevent button from shrinking */
+    }
+
+    .act-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px black;
+    }
+
+    .act-btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    /* --- FUNNEL STYLES --- */
+    .funnel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .funnel-stage {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .funnel-stage:last-child {
+        margin-bottom: 0;
+    }
+
+    .funnel-stage:hover {
+      transform: scale(1.03);
+    }
+
+    .funnel-stage::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      border-top: none;
+      box-sizing: border-box;
+    }
+
+    .funnel-stage::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 25px;
+      border-radius: 50%;
+      z-index: 1;
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 8px 10px -3px rgba(0, 0, 0, 0.5);
+    }
+
+    .stage-text {
+      position: relative;
+      z-index: 3;
+      color: white;
+      font-weight: 600;
+      text-align: center;
+      padding: 0 5px;
+      padding-top: 4px;
+    }
+
+    .funnel-stage.s1 { width: 95%; height: 45px; z-index: 5; }
+    .funnel-stage.s1 .stage-text { font-size: 16px; }
+    .funnel-stage.s1::before { background: linear-gradient(to bottom, #f08a89, #e87a79); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s1::after { background: #e87a79; }
+    .funnel-stage.s2 { width: 80.75%; height: 45px; z-index: 4; }
+    .funnel-stage.s2 .stage-text { font-size: 15px; }
+    .funnel-stage.s2::before { background: linear-gradient(to bottom, #8f6dd1, #7e57c2); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s2::after { background: #7e57c2; }
+    .funnel-stage.s3 { width: 68.6%; height: 45px; z-index: 3; }
+    .funnel-stage.s3 .stage-text { font-size: 14px; }
+    .funnel-stage.s3::before { background: linear-gradient(to bottom, #60d9e9, #4dd0e1); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s3::after { background: #4dd0e1; }
+    .funnel-stage.s4 { width: 58.3%; height: 45px; z-index: 2; }
+    .funnel-stage.s4 .stage-text { font-size: 12px; color: #333; }
+    .funnel-stage.s4::before { background: linear-gradient(to bottom, #ffe370, #ffd54f); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s4::after { background: #ffd54f; }
+    .funnel-stage.s5 { width: 49.5%; height: 45px; z-index: 1; }
+    .funnel-stage.s5 .stage-text { font-size: 11px; color: #333; }
+    .funnel-stage.s5::before { background: linear-gradient(to bottom, #ffca4a, #ffc107); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s5::after { background: #ffc107; }
+
+    /* --- CONTENT AREA & LEAD LIST --- */
+    .content {
+      width: 70%;
+      flex-grow: 1; /* Allow content to grow */
+    }
+
+    .content-header {
+      background: #d46a6a;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px 5px 0 0;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .icons i { margin-left: 12px; cursor: pointer; transition: 0.2s; }
+    .icons i:hover { transform: scale(1.2); color: yellow; }
+
+    /* Header controls: filters + search */
+    .controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .controls select, .controls input {
+      background: #fff;
+      border: 1px solid #d46a6a;
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      color: #333;
+    }
+    .controls input { width: 160px; }
+
+    .leads-list {
+      background: #f7f2e7;
+      border: 1px solid #d46a6a;
+      border-top: none;
+      padding: 10px;
+      border-radius: 0 0 5px 5px;
+    }
+    
+    /* --- FULLY REVISED LEAD ITEM STYLES --- */
+    .lead-item {
+      background: #f9e4c6;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .lead-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .lead-details-wrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .lead-avatar {
+      font-size: 32px;
+      color: #555;
+      margin-top: 5px;
+    }
+    
+    .lead-info-columns {
+        display: flex;
+        gap: 40px;
+    }
+
+    .lead-info {
+      color: #555;
+      line-height: 1.7;
+      font-size: 12px;
+    }
+    
+    .lead-info .label {
+        font-weight: 400;
+        color: #666;
+    }
+    
+    .lead-info .data {
+        font-weight: 600;
+        color: #000;
+        margin-left: 8px;
+    }
+
+    .lead-info span.label {
+      font-weight: bold;
+      color: #c62828;
+    }
+     .lead-info span .data {
+      font-weight: bold;
+      color: #c62828;
+    }
+
+    .lead-info .label.new-field {
+        color: #007bff;
+    }
+    .lead-info .data.new-field {
+        color: #333;
+    }
+    
+    /* --- NEW STYLES for right-side actions --- */
+    .actions-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers the stamp under the button */
+        gap: 8px; /* Space between button and stamp */
+    }
+
+    .stamp {
+      /* Removed absolute positioning */
+      font-size: 14px;
+      font-weight: 700;
+      color: red;
+      border: 2px solid red;
+      border-radius: 4px;
+      padding: 2px 8px;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+  <style>
+    /* Loading Bar CSS */
+    #loading-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background-color: black;
+        z-index: 9999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+    }
+    #loading-bar.show {
+        transform: translateX(0);
+    }
+
+    /* Action dropdown */
+    .action-menu {
+      position: absolute;
+      right: 15px;
+      top: 55px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 20;
+      overflow: hidden;
+    }
+    .action-menu button {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      background: #fff;
+      border: 0;
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+    }
+    .action-menu button:hover { background: #f7f2e7; }
+
+    /* Follow-up modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      width: 320px;
+      border: 1px solid #d46a6a;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .modal h3 { margin: 0 0 10px 0; font-size: 16px; }
+    .modal label { display: block; font-size: 12px; margin: 10px 0 6px; }
+    .modal input[type="datetime-local"] { width: 100%; padding: 8px; font-family: 'Poppins', sans-serif; }
+    .modal .actions { margin-top: 12px; display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-secondary { background: #eee; border: 1px solid #ccc; padding: 8px 12px; cursor: pointer; }
+    .btn-primary { background: #d46a6a; color: #fff; border: 1px solid #000; padding: 8px 12px; cursor: pointer; box-shadow: 3px 3px 0 #000; font-weight: 700; }
+    /* Loading spinner */
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .spinner {
+      width: 28px; height: 28px; border: 4px solid #f3f3f3; border-top: 4px solid #d46a6a; border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .loading-overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.6); z-index: 50;
+    }
+    .relative-wrap { position: relative; }
+    /* Toast */
+    .toast {
+      position: fixed; right: 16px; bottom: 16px; background:#333; color:#fff; padding:10px 14px; border-radius:6px; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:9999; opacity:0; transform:translateY(10px); transition: all .2s ease;
+    }
+    .toast.show { opacity:1; transform:translateY(0); }
+  </style>
+  <style>
+    /* New style to hide the funnel */
+    .funnel-hidden {
+      display: none !important;
+    }
+
+    /* Adjust the funnel to allow for button positioning */
+    .box.lead-funnel-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loading-bar"></div>
+
+  <div class="header">
+    <div>Physics Wallah</div>
+    <div>Admissions 2025</div>
+    <div id="centreName">Centre Name</div>
+  </div>
+
+  <div class="container">
+
+    <div class="sidebar">
+      <div class="box">
+        <span>Today's Flow</span>
+        <button class="act-btn" id="btnSidebarActNow" style="font-size: 11px; padding: 8px 12px; box-shadow: 3px 3px 0px black;">ACT NOW</button>
+      </div>
+      <div class="box lead-funnel-box">
+        <span>Lead funnel</span>
+        <button class="act-btn" id="btnViewFunnel" style="font-size: 11px; padding: 8px 12px; box-shadow: 3px 3px 0px black;">VIEW DATA</button>
+      </div>
+      
+      <div class="funnel funnel-hidden" id="leadFunnelContainer">
+        <div class="funnel-stage s1" data-stage="all"><div class="stage-text" id="funnel-total">Total Leads</div></div>
+        <div class="funnel-stage s2" data-stage="1"><div class="stage-text" id="funnel-1">1st Installment Due</div></div>
+        <div class="funnel-stage s3" data-stage="2"><div class="stage-text" id="funnel-2">2nd Installment Due</div></div>
+        <div class="funnel-stage s4" data-stage="3"><div class="stage-text" id="funnel-3">3rd Installment Due</div></div>
+        <div class="funnel-stage s5" data-stage="4"><div class="stage-text" id="funnel-4">4th Installment Due</div></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="content-header">
+        <span id="listTitle">Total Leads</span>
+        <div class="controls">
+          <input id="searchRegno" type="text" placeholder="Search RegNo" maxlength="20">
+          <button class="act-btn" id="btnSearch" style="padding:6px 10px; box-shadow: 2px 2px 0 #000;">Search</button>
+          <button class="act-btn" id="btnOverdue" style="padding:6px 10px; box-shadow: 2px 2px 0 #000; background:#c62828;">OVERDUE LEADS</button>
+          <button class="act-btn" id="btnExport" style="padding:6px 10px; box-shadow: 2px 2px 0 #000; background:#7e57c2;">Download CSV</button>
+          <a class="act-btn" id="btnReports" style="padding:6px 10px; box-shadow: 2px 2px 0 #000; background:#4dd0e1; color:#000;" href="#">Reports</a>
+          <button class="act-btn" id="btnClose" style="padding:6px 10px; box-shadow: 2px 2px 0 #000; background:#777;">X</button>
+        </div>
+      </div>
+      <div class="relative-wrap" style="display:none;">
+        <div class="leads-list" id="leadsList"></div>
+        <div id="spinnerMain" class="loading-overlay" style="display:none;"><div class="spinner"></div></div>
+      </div>
+      <div class="relative-wrap">
+        <div class="leads-list" id="todayView" style="display:none; margin-top:10px;">
+        <div class="content-header" style="margin:-10px -10px 10px -10px; border-radius:5px;">
+          <span>Today</span>
+          <div class="controls" id="todayCounters">
+            <span id="actionsTodayCounter" style="margin-right:10px;">Actions Taken Today: 0</span>
+            <span id="leadsAvailableCounter">Leads Available: 0</span>
+          </div>
+        </div>
+        <div class="controls" style="margin: 0 0 10px 0;">
+          <button class="act-btn" id="filterTodayAll" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#777;">All</button>
+          <button class="act-btn" id="filterTodayOverdue" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#c62828;">Overdue</button>
+          <button class="act-btn" id="filterTodayPrev" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#8f6dd1;">Prev DNP/SO</button>
+          <button class="act-btn" id="filterTodaySoon" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#ffc107; color:#333;">Due soon</button>
+          <button class="act-btn" id="filterTodayDnp" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#e62222;">Overdue DNP</button>
+        </div>
+        <div id="secOverdue"></div>
+        <div id="secPrevAttempts" style="margin-top:10px;"></div>
+        <div id="secDueSoon" style="margin-top:10px;"></div>
+        <div id="secOverdueDnp" style="margin-top:10px;"></div>
+        </div>
+        <div id="spinnerToday" class="loading-overlay" style="display:none;"><div class="spinner"></div></div>
+      </div>
+                    </div>
+                </div>
+  <script>
+    (function(){
+      function getQueryParam(name){
+        var params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
+
+      var loadingBar = document.getElementById('loading-bar');
+
+      function showLoadingBar() {
+          if (loadingBar) {
+              loadingBar.classList.add('show');
+          }
+      }
+
+      function hideLoadingBar() {
+          if (loadingBar) {
+              loadingBar.classList.remove('show');
+          }
+      }
+
+      var centerFromQuery = getQueryParam('center');
+      var center = centerFromQuery || (function(){ try { return sessionStorage.getItem('center') || ''; } catch (_) { return ''; } })();
+      var employeeCode = (function(){ try { return sessionStorage.getItem('employeeCode') || ''; } catch (_) { return ''; } })();
+      var employeeCodeFromQuery = getQueryParam('employeeCode');
+      if (employeeCodeFromQuery) employeeCode = employeeCodeFromQuery; // Prioritize query param
+ 
+      var centreNameEl = document.getElementById('centreName');
+      if (centreNameEl) { centreNameEl.textContent = center || 'Centre Name'; }
+      if (!center || !employeeCode) {
+        // If no center or employeeCode, send back to login
+        window.location.replace('index.html');
+        return;
+      }
+
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbykJTJYdBcxr459wnO4kYLdAj7JezT-BcH3EaTAL5YGxHJIHn8mJxyIPA3eHLMAavCWNw/exec';
+
+      var listTitleEl = document.getElementById('listTitle');
+      var leadsListEl = document.getElementById('leadsList');
+      var leadsWrapEl = leadsListEl ? leadsListEl.parentElement : null;
+      var filterDueEl = null; // removed All Due filter
+      var searchRegnoEl = document.getElementById('searchRegno');
+      var btnSearch = document.getElementById('btnSearch');
+      var btnOverdue = document.getElementById('btnOverdue');
+      var btnReports = document.getElementById('btnReports');
+      var btnExport = document.getElementById('btnExport');
+      var btnClose = document.getElementById('btnClose');
+      var funnelIds = {
+        all: document.getElementById('funnel-total'),
+        1: document.getElementById('funnel-1'),
+        2: document.getElementById('funnel-2'),
+        3: document.getElementById('funnel-3'),
+        4: document.getElementById('funnel-4')
+      };
+      var btnSidebarActNow = document.getElementById('btnSidebarActNow');
+      if (btnSidebarActNow) {
+  btnSidebarActNow.addEventListener('click', function() {
+    loadToday('all');
+  });
+}
+      var todayViewEl = document.getElementById('todayView');
+      var todayCountersEl = document.getElementById('todayCounters');
+      var secOverdue = document.getElementById('secOverdue');
+      var secDueSoon = document.getElementById('secDueSoon');
+      var secPrevAttempts = document.getElementById('secPrevAttempts');
+      var secOverdueDnp = document.getElementById('secOverdueDnp');
+      try { console.info('[Dashboard:init]', { API_BASE: API_BASE, center: center, employeeCode: employeeCode }); } catch(_) {}
+      var lastTodayData = null;
+
+      function showError(msg){
+        leadsListEl.innerHTML = '<div style="padding:10px;color:#b00020;">'+ msg +'</div>';
+        try { console.error('[Dashboard:error]', msg); } catch(_) {}
+      }
+
+      function formatCurrency(n){
+        try { return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(n || 0)); } catch(_) { return '₹' + (n || 0); }
+      }
+
+      function buildLeadCard(item){
+        var regno = item.regno || item.RegNo || item.reg_no || '';
+        var source = item.source_name || item.source || '';
+        var dueDate = item.DueDate || item.due_date || '';
+        var amountDue = item.AmountDue || item.amount_due || '';
+        var instStatus = item.Installment_Status || item.installment_status || '';
+        var totalBal = item.total_balance_cr || item.total_balance || '';
+        var lastRemark = item.lastRemark || item.last_remark || '';
+        var statusInfo = item.currentStatus ? { label: item.currentStatus, kind: 'dnp-overdue' } : computeStatus(dueDate);
+
+        var el = document.createElement('div');
+        el.className = 'lead-item';
+        el.setAttribute('data-regno', String(regno));
+        el.innerHTML = (
+          '<div class="lead-details-wrapper">'
+          + '<i class="fa fa-user-circle lead-avatar"></i>'
+          + '<div class="lead-info-columns">'
+          +   '<div class="lead-info">'
+          +     '<div class="label">Registered Number:<strong class="data">'+ (regno || '-') +'</strong></div>'
+          +     '<div class="label new-field">Name:<strong class="data new-field">'+ (item.name || '-') +'</strong></div>'
+          +     '<div class="label new-field">Phone Number:<strong class="data new-field">'+ (item.phoneNumber || '-') +'</strong></div>'
+          +     '<div class="label">Source:<strong class="data">'+ (source || '-') +'</strong></div>'
+          +     '<div class="label">Installment status:<strong class="data">'+ (instStatus || '-') +'</strong></div>'
+          +     '<div class="label">Due date:<strong class="data">'+ (dueDate || '-') +'</strong></div>'
+          +     '<div class="label">Current status:<strong class="data">'+ statusInfo.label +'</strong></div>'
+          +   '</div>'
+          +   '<div class="lead-info">'
+          +     '<div class="label">Due Amount:<strong class="data">'+ formatCurrency(amountDue) +'</strong></div>'
+          +     '<div class="label">Total balance:<strong class="data">'+ formatCurrency(totalBal) +'</strong></div>'
+          +     (lastRemark ? '<div class="label">Last Remarks:<strong class="data">'+ lastRemark +'</strong></div>' : '')
+          +     (item.attemptNo ? '<div class="label">Attempt:<strong class="data">'+ item.attemptNo +'</strong></div>' : '')
+          +     (item.lastActionAt ? '<div class="label">Last Action:<strong class="data">'+ item.lastActionAt +'</strong></div>' : '')
+          +     (item.nextActionAt ? '<div class="label">Next Action:<strong class="data">'+ item.nextActionAt +'</strong></div>' : '')
+          +   '</div>'
+          + '</div>'
+          + '</div>'
+          + '<div class="actions-wrapper">'
+          +   '<button class="act-btn">ACT NOW</button>'
+          +   (item.attemptNo ? '<div class="stamp">Attempt '+ item.attemptNo +'</div>' : '')
+          + '</div>'
+        );
+
+        var actBtn = el.querySelector('.act-btn');
+        actBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          toggleActionMenu(el, regno);
+        });
+        // Click on avatar opens history
+        var avatar = el.querySelector('.lead-avatar');
+        if (avatar) avatar.addEventListener('click', function(e){ e.stopPropagation(); openHistoryModal(regno); });
+        return el;
+      }
+      function computeStatus(dueDate){
+        if (!dueDate) return { label: '-', kind: '' };
+        var d = new Date(dueDate);
+        if (isNaN(d.getTime())) return { label: '-', kind: '' };
+        var ms = d.setHours(0,0,0,0) - new Date().setHours(0,0,0,0);
+        var days = Math.round(ms / 86400000);
+        if (days < 0) return { label: 'Overdue by ' + Math.abs(days) + ' days', kind: 'overdue' };
+        if (days === 0) return { label: 'Due today', kind: 'tobedue' };
+        return { label: 'To be due in ' + days + ' days', kind: 'tobedue' };
+      }
+
+      function applyFilters(){
+        var src = '';
+        var due = '';
+        var regq = (searchRegnoEl && searchRegnoEl.value || '').trim();
+        var list = []; // No client-side suppression, so list is always empty
+        // src filter removed as part of employee-code based login
+        // if (src) filtered = filtered.filter(function(x){ return (x.source_name||'').toLowerCase() === src.toLowerCase(); });
+        // due filter removed; Today sections prefilter the data
+        if (regq) list = list.filter(function(x){ return (('' + (x.regno||'')).includes(regq) || (x.name || '').toLowerCase().includes(regq.toLowerCase()) || (x.phoneNumber || '').includes(regq)); });
+        try { console.log('[Filters]', { source: src, due: due, regnoQuery: regq, inputCount: 0, outputCount: list.length }); } catch(_) {}
+        renderLeads(list);
+      }
+
+      function renderLeads(leads){
+        leadsListEl.innerHTML = '';
+        var visible = leads || [];
+        if (!visible || !visible.length){
+          leadsListEl.innerHTML = '<div style="padding:10px;">No leads to show.</div>';
+          try { console.warn('[RenderLeads] empty list'); } catch(_) {}
+          return;
+        }
+        try { console.log('[RenderLeads] rendering', visible.length, 'items'); } catch(_) {}
+        visible.forEach(function(item){
+          leadsListEl.appendChild(buildLeadCard(item));
+        });
+      }
+
+      function closeAllActionMenus(){
+        document.querySelectorAll('.action-menu').forEach(function(m){ m.parentNode && m.parentNode.removeChild(m); });
+      }
+
+      function toggleActionMenu(containerEl, regno){
+        closeAllActionMenus();
+        var menu = document.createElement('div');
+        menu.className = 'action-menu';
+        var options = ['Already Paid','DNP 1','DNP 2','DNP 3','DNP 4','DNP 5','Switch off','Follow Up Required'];
+        try { console.log('[ActionMenu] open for', regno); } catch(_) {}
+        options.forEach(function(opt){
+          var btn = document.createElement('button');
+          btn.textContent = opt;
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            if (opt === 'Follow Up Required') { openFollowUpModal(regno); }
+            else if (opt === 'Switch off' || opt.indexOf('DNP') === 0) { openRemarkModal(regno, opt); }
+            else {
+              submitAction({ regno: regno, action: opt });
+            }
+            closeAllActionMenus();
+          });
+          menu.appendChild(btn);
+        });
+        containerEl.appendChild(menu);
+        document.addEventListener('click', closeAllActionMenus, { once: true });
+      }
+
+      function openFollowUpModal(regno){
+        try { console.log('[Modal] FollowUp open for', regno); } catch(_) {}
+        var backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = ''
+          + '<h3>Schedule Follow Up</h3>'
+          + '<label for="fudt">Follow-up date & time</label>'
+          + '<input id="fudt" type="datetime-local">'
+          + '<label for="fuRemark">Remark (optional)</label>'
+          + '<input id="fuRemark" type="text" placeholder="Remark" style="width:100%; padding:8px;">'
+          + '<div class="actions">'
+          +   '<button class="btn-secondary">Cancel</button>'
+          +   '<button class="btn-primary">Save</button>'
+          + '</div>';
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+
+        var input = modal.querySelector('#fudt');
+        var remarkInput = modal.querySelector('#fuRemark');
+        var cancel = modal.querySelector('.btn-secondary');
+        var save = modal.querySelector('.btn-primary');
+        cancel.addEventListener('click', function(){ document.body.removeChild(backdrop); });
+        save.addEventListener('click', function(){
+          var dt = (input && input.value) ? new Date(input.value) : null;
+          if (!dt) { input.focus(); return; }
+          submitAction({ regno: regno, action: 'Follow Up Required', followUpAt: dt.toISOString(), remark: (remarkInput && remarkInput.value) || '' });
+          document.body.removeChild(backdrop);
+        });
+      }
+
+      function openRemarkModal(regno, action){
+        try { console.log('[Modal] Remark open', { regno: regno, action: action }); } catch(_) {}
+        var backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = ''
+          + '<h3>'+ action +'</h3>'
+          + '<label for="rk">Remark (optional)</label>'
+          + '<input id="rk" type="text" placeholder="Remark" style="width:100%; padding:8px;">'
+          + '<div class="actions">'
+          +   '<button class="btn-secondary">Cancel</button>'
+          +   '<button class="btn-primary">Save</button>'
+          + '</div>';
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+        var rk = modal.querySelector('#rk');
+        modal.querySelector('.btn-secondary').addEventListener('click', function(){ document.body.removeChild(backdrop); });
+        modal.querySelector('.btn-primary').addEventListener('click', function(){
+          var remarkVal = (rk && rk.value) || '';
+          var msg = 'Mark '+ action +' for '+ regno +' and remove this lead for today?';
+          var ok = false;
+          try { ok = window.confirm(msg); } catch(_) { ok = true; }
+          if (!ok) { return; }
+          submitAction({ regno: regno, action: action, remark: remarkVal });
+          document.body.removeChild(backdrop);
+          showToast(action + ' saved for ' + regno + '.');
+        });
+      }
+
+      function openHistoryModal(regno){
+        var backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.width = '520px';
+        modal.innerHTML = ''
+          + '<h3>History: '+ regno +'</h3>'
+          + '<div id="histBody" style="max-height: 340px; overflow:auto;">'
+          +   '<div class="muted">Loading...</div>'
+          + '</div>'
+          + '<div class="actions">'
+          +   '<button class="btn-primary">Close</button>'
+          + '</div>';
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+        modal.querySelector('.btn-primary').addEventListener('click', function(){ document.body.removeChild(backdrop); });
+        var url = API_BASE + '?action=history&center=' + encodeURIComponent(center) + '&regno=' + encodeURIComponent(regno);
+        fetchJSON(url).then(function(data){
+          var hb = modal.querySelector('#histBody');
+          if (!data || !data.ok){ hb.innerHTML = '<div class="muted">No history</div>'; return; }
+          var list = data.history || [];
+          if (!list.length){ hb.innerHTML = '<div class="muted">No history</div>'; return; }
+          hb.innerHTML = '<table style="width:100%; border-collapse:collapse; font-size:12px;">'
+            + '<thead><tr><th style="text-align:left; border-bottom:1px solid #ddd; padding:6px;">When</th><th style="text-align:left; border-bottom:1px solid #ddd; padding:6px;">Action</th><th style="text-align:left; border-bottom:1px solid #ddd; padding:6px;">Remark</th><th style="text-align:left; border-bottom:1px solid #ddd; padding:6px;">By</th></tr></thead><tbody>'
+            + list.map(function(row){ return '<tr>'
+              + '<td style="border-bottom:1px solid #f0f0f0; padding:6px;">' + (row.timestampLocal || row.timestampISO || '-') + '</td>'
+              + '<td style="border-bottom:1px solid #f0f0f0; padding:6px;">' + (row.action || '-') + '</td>'
+              + '<td style="border-bottom:1px solid #f0f0f0; padding:6px;">' + (row.remark || '-') + '</td>'
+              + '<td style="border-bottom:1px solid #f0f0f0; padding:6px;">' + (row.employeeCode || '-') + '</td>'
+            + '</tr>'; }).join('')
+            + '</tbody></table>';
+        }).catch(function(){ var hb = modal.querySelector('#histBody'); hb.innerHTML = '<div class="muted">Failed to load history</div>'; });
+      }
+
+      function showToast(message, type = 'info'){
+        try {
+          var t = document.createElement('div');
+          t.className = 'toast';
+          t.textContent = message;
+          if (type === 'error') {
+            t.style.backgroundColor = '#b00020';
+            t.style.color = '#fff';
+          }
+          document.body.appendChild(t);
+          setTimeout(function(){ t.classList.add('show'); }, 10);
+          setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ document.body.removeChild(t); }, 200); }, 2500);
+        } catch (_) {}
+      }
+
+      function submitAction(payload){
+        try { console.group('[Action] submit'); console.log('payload', payload); } catch(_) {}
+
+        var body = {
+          center: center,
+          regno: payload.regno,
+          action: payload.action,
+          followUpAt: payload.followUpAt || '',
+          employeeCode: employeeCode || '',
+          remark: payload.remark || ''
+        };
+
+        if (!API_BASE || API_BASE.indexOf('REPLACE_WITH_YOUR_GAS_WEBAPP_URL') !== -1) {
+          // Local fallback storage for dev/demo
+          try {
+            var key = 'actions_' + center;
+            var arr = JSON.parse(localStorage.getItem(key) || '[]');
+            arr.push(Object.assign({ timestamp: new Date().toISOString() }, body));
+            localStorage.setItem(key, JSON.stringify(arr));
+            console.log('[Action] saved locally');
+          } catch (_) {}
+          try { console.groupEnd(); } catch(_) {}
+          return;
+        }
+
+        fetch(API_BASE + '?action=logAction', {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(body)
+        }).then(r => r.json())
+          .then(function(resp) {
+            if (resp && resp.ok) {
+              // 1. Get the registration number of the lead that was acted on.
+              var actedRegno = String(payload.regno);
+ 
+              // 2. Update the local data cache to remove the lead.
+              if (lastTodayData && lastTodayData.sections) {
+                lastTodayData.sections.overdueFollowups = lastTodayData.sections.overdueFollowups.filter(
+                  lead => lead.regno !== actedRegno
+                );
+                lastTodayData.sections.prevAttempts = lastTodayData.sections.prevAttempts.filter(
+                  lead => lead.regno !== actedRegno
+                );
+                lastTodayData.sections.dueSoon = lastTodayData.sections.dueSoon.filter(
+                  lead => lead.regno !== actedRegno
+                );
+                lastTodayData.sections.overdueDnpLeads = lastTodayData.sections.overdueDnpLeads.filter(
+                  lead => lead.regno !== actedRegno
+                );
+              }
+ 
+              // 3. Increment the local counter.
+              if (lastTodayData && lastTodayData.counters) {
+                  lastTodayData.counters.actionsToday = (lastTodayData.counters.actionsToday || 0) + 1;
+              }
+ 
+              // 4. Now, re-render the UI from the updated cache.
+              renderTodayFromCache();
+ 
+              // 5. Show the success message.
+              showToast('Action saved for ' + actedRegno + '.');
+ 
+            } else {
+              showToast('Action failed to save. Please try again.', 'error');
+              console.error('[Action] Backend returned an error:', resp.error);
+            }
+          })
+          .catch(function(err){
+            showToast('Network error: Action could not be saved.', 'error');
+            console.error('[Action] post error', err);
+          })
+          .finally(function(){
+            try { console.groupEnd(); } catch(_) {};
+            try { refreshFunnel(); } catch(_) {};
+          });
+      }
+
+      function fetchJSON(url){
+        showLoadingBar();
+        try { console.groupCollapsed('[API GET]', url); } catch(_) {}
+        var isToday = url.indexOf('action=today') !== -1;
+        try { (isToday ? (document.getElementById('spinnerToday').style.display='flex') : (document.getElementById('spinnerMain').style.display='flex')); } catch(_) {}
+        return fetch(url, { method: 'GET' })
+          .then(function(r){ try { console.log('status', r.status); } catch(_) {}; return r.text(); })
+          .then(function(text){
+            hideLoadingBar();
+            try { console.log('raw', text); } catch(_) {}
+            var data = null;
+            try { data = JSON.parse(text); } catch(e) { try { console.error('JSON parse error', e); } catch(_) {} }
+            // Log backend debug info if present
+            if (data && data.debug) {
+              console.log('[Frontend:API GET] Backend Debug Info:', data.debug);
+            }
+            try { console.log('parsed', data); console.groupEnd(); } catch(_) {}
+            return data;
+          })
+          .catch(function(err){
+            hideLoadingBar();
+            try { console.error('[API GET] error', err); console.groupEnd(); } catch(_) {}; throw err; })
+          .finally(function(){ try { (isToday ? (document.getElementById('spinnerToday').style.display='none') : (document.getElementById('spinnerMain').style.display='none')); } catch(_) {} });
+      }
+
+      function refreshFunnel(){
+        if (!API_BASE || API_BASE.indexOf('REPLACE_WITH_YOUR_GAS_WEBAPP_URL') !== -1) {
+          // demo counts when backend not configured
+          if (funnelIds.all) funnelIds.all.textContent = 'Total Leads (—)';
+          if (funnelIds[1]) funnelIds[1].textContent = '1st Installment Due (—)';
+          if (funnelIds[2]) funnelIds[2].textContent = '2nd Installment Due (—)';
+          if (funnelIds[3]) funnelIds[3].textContent = '3rd Installment Due (—)';
+          if (funnelIds[4]) funnelIds[4].textContent = '4th Installment Due (—)';
+          return Promise.resolve();
+        }
+        var url = API_BASE + '?action=funnel&center=' + encodeURIComponent(center) + '&employeeCode=' + encodeURIComponent(employeeCode);
+        try { console.log('[Funnel] fetching', url); } catch(_) {}
+        return fetchJSON(url)
+          .then(function(data){
+            if (!data) return;
+            try { console.log('[Funnel] data', data); } catch(_) {}
+            if (funnelIds.all) funnelIds.all.textContent = 'Total Leads (' + (data.total || 0) + ')';
+            if (funnelIds[1]) funnelIds[1].textContent = '1st Installment Due (' + (data.stage1 || 0) + ')';
+            if (funnelIds[2]) funnelIds[2].textContent = '2nd Installment Due (' + (data.stage2 || 0) + ')';
+            if (funnelIds[3]) funnelIds[3].textContent = '3rd Installment Due (' + (data.stage3 || 0) + ')';
+            if (funnelIds[4]) funnelIds[4].textContent = '4th Installment Due (' + (data.stage4 || 0) + ')';
+          }).catch(function(err){ try { console.error('[Funnel] error', err); } catch(_) {} });
+      }
+
+      function loadLeads(stage){
+        var title = 'Total Leads';
+        if (stage === '1') title = '1st Installment Due';
+        else if (stage === '2') title = '2nd Installment Due';
+        else if (stage === '3') title = '3rd Installment Due';
+        else if (stage === '4') title = '4th Installment Due';
+        if (listTitleEl) listTitleEl.textContent = title;
+        try { console.log('[Leads] load', { stage: stage, title: title }); } catch(_) {}
+
+        if (!API_BASE || API_BASE.indexOf('REPLACE_WITH_YOUR_GAS_WEBAPP_URL') !== -1) {
+          // demo data
+          var list = []; // No client-side suppression, so list is always empty
+          renderLeads(list);
+          return Promise.resolve();
+        }
+        var url = API_BASE + '?action=leads&center=' + encodeURIComponent(center) + '&stage=' + encodeURIComponent(stage || 'all') + '&employeeCode=' + encodeURIComponent(employeeCode);
+        try { console.log('[Leads] fetching', url); } catch(_) {}
+        document.getElementById('spinnerMain').style.display = 'flex';
+        return fetchJSON(url)
+          .then(function(data){
+            var list = Array.isArray(data) ? data : [];
+            try { console.log('[Leads] received', list.length, 'items'); } catch(_) {}
+            applyFilters();
+          })
+          .catch(function(err){ showError('Failed to load leads'); try { console.error('[Leads] error', err); } catch(_) {} });
+      }
+
+      function loadToday(stage){
+        var url = API_BASE + '?action=today&center=' + encodeURIComponent(center) + '&stage=' + encodeURIComponent(stage || 'all') + '&employeeCode=' + encodeURIComponent(employeeCode);
+        try { console.log('[Today] fetching', url); } catch(_) {}
+        fetchJSON(url).then(function(data){
+          try { console.log('[Today] data', data); } catch(_) {}
+          if (!data || !data.sections) { showError('Failed to load Today'); return; }
+          // Cache, rebuild filters, and render with current controls
+          lastTodayData = data;
+          var s = data.sections || {};
+          var combined = [];
+          (s.overdueFollowups || []).forEach(function(x){ combined.push(x); });
+          (s.prevAttempts || []).forEach(function(x){ combined.push(x); });
+          (s.dueSoon || []).forEach(function(x){ combined.push(x); });
+          (s.overdueDnpLeads || []).forEach(function(x){ combined.push(x); }); // Include DNP leads for filter
+          renderTodayFromCache();
+        }).catch(function(err){ showError('Failed to load Today'); try { console.error('[Today] error', err); } catch(_) {} });
+      }
+
+      document.querySelectorAll('.funnel-stage').forEach(function(stageEl){
+        // Keep hover effects but disable click loading; comment out logic
+        // stageEl.addEventListener('click', function(){
+        //   var stage = stageEl.getAttribute('data-stage') || 'all';
+        //   loadLeads(stage);
+        //   todayViewEl.style.display = 'none';
+        // });
+      });
+
+      function onFilterChange(){
+        if (todayViewEl.style.display !== 'none') { renderTodayFromCache(); }
+        else { applyFilters(); }
+      }
+      if (btnSearch) btnSearch.addEventListener('click', function(){ onFilterChange(); });
+      if (searchRegnoEl) searchRegnoEl.addEventListener('keypress', function(e){ if (e.key === 'Enter') { e.preventDefault(); onFilterChange(); } });
+      if (searchRegnoEl) searchRegnoEl.addEventListener('input', function(){ onFilterChange(); });
+      // filterSourceEl removed
+      // due filter removed
+      if (btnClose) btnClose.addEventListener('click', function(){ leadsListEl.innerHTML = ''; listTitleEl.textContent = 'Leads closed'; });
+
+      if (btnExport) btnExport.addEventListener('click', function(){
+        var rows = [];
+        var dataset = [];
+        if (todayViewEl.style.display !== 'none'){
+          var s = (lastTodayData && lastTodayData.sections) || {};
+          (s.overdueFollowups || []).forEach(function(x){ dataset.push(x); });
+          (s.prevAttempts || []).forEach(function(x){ dataset.push(x); });
+          (s.dueSoon || []).forEach(function(x){ dataset.push(x); });
+          (s.overdueDnpLeads || []).forEach(function(x){ dataset.push(x); }); // Include DNP leads for export
+        } else {
+          // No client-side suppression, so dataset is always empty
+          dataset = [];
+        }
+        var filtered = []; // No client-side filtering
+        rows.push(['regno','name','phoneNumber','source_name','DueDate','AmountDue','Installment_Status','total_balance_cr','CurrentStatus']);
+        filtered.forEach(function(x){
+          var st = computeStatus(x.DueDate).label;
+          rows.push([x.regno, x.name, x.phoneNumber, x.source_name, x.DueDate, x.AmountDue, x.Installment_Status, x.total_balance_cr, st]);
+        });
+        var csv = rows.map(function(r){ return r.map(function(v){
+          var s = (v==null?'':String(v));
+          if (s.search(/[",\n]/)>=0) s = '"' + s.replace(/"/g,'""') + '"';
+          return s;
+        }).join(','); }).join('\n');
+        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        var suffix = todayViewEl.style.display !== 'none' ? '_today.csv' : '_overdue.csv';
+        a.download = (center.replace(/\s+/g,'_') + suffix);
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function(){ URL.revokeObjectURL(url); document.body.removeChild(a); }, 0);
+      });
+
+      function renderSection(container, title, list){
+        container.innerHTML = '';
+        var items = list || [];
+        if (!items.length) { return; }
+        var head = document.createElement('div');
+        head.className = 'content-header';
+        head.style.margin = '-10px -10px 10px -10px';
+        head.style.borderRadius = '5px';
+        head.innerHTML = '<span>'+ title + ' (' + items.length + ')</span>';
+        container.appendChild(head);
+        items.forEach(function(item){
+          container.appendChild(buildLeadCard(item));
+        });
+      }
+      function showOnly(section){
+        if (todayViewEl.style.display === 'none') return;
+        secOverdue.style.display = (section==='all' || section==='overdue') ? '' : 'none';
+        secPrevAttempts.style.display = (section==='all' || section==='prev') ? '' : 'none';
+        secDueSoon.style.display = (section==='all' || section==='soon') ? '' : 'none';
+        secOverdueDnp.style.display = (section==='all' || section==='dnp') ? '' : 'none';
+      }
+      function renderTodayFromCache(){
+        if (!lastTodayData || !lastTodayData.sections) { return; }
+        // Clear main list and previous sections, then counters
+        leadsListEl.innerHTML = '';
+        secOverdue.innerHTML = '';
+        secPrevAttempts.innerHTML = '';
+        secDueSoon.innerHTML = '';
+        secOverdueDnp.innerHTML = '';
+
+        var s = lastTodayData.sections || {};
+        var fOver = []; // No client-side filtering
+        var fPrev = []; // No client-side filtering
+        var fDue = []; // No client-side filtering
+        var fDnp = []; // No client-side filtering
+        var total = fPrev.length + fDue.length + fOver.length;
+        var actionsToday = (lastTodayData.counters && lastTodayData.counters.actionsToday) || 0;
+        var todayPoolAll = (lastTodayData.counters && lastTodayData.counters.todayPoolAll) || (total + actionsToday);
+
+        document.getElementById('actionsTodayCounter').textContent = 'Actions Taken Today: ' + actionsToday;
+        document.getElementById('leadsAvailableCounter').textContent = 'Live Leads Available: ' + todayPoolAll;
+
+        renderSection(secOverdue, 'Overdue Follow-ups', s.overdueFollowups || []);
+        renderSection(secPrevAttempts, 'Yesterday/Previous DNP or Switch off', s.prevAttempts || []);
+        renderSection(secDueSoon, 'Due payments (today + next 7 days)', s.dueSoon || []);
+        renderSection(secOverdueDnp, 'Overdue DNP Leads', s.overdueDnpLeads || []);
+        todayViewEl.style.display = '';
+        if (leadsWrapEl) leadsWrapEl.style.display = 'none';
+        listTitleEl.textContent = 'Today';
+      }
+
+      function loadOverdue(){
+  var url = API_BASE + '?action=leads&center=' + encodeURIComponent(center) + '&stage=all' + '&employeeCode=' + encodeURIComponent(employeeCode);
+  try { console.log('[Overdue] fetching', url); } catch(_) {}
+  fetchJSON(url).then(function(data){
+    var list = Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []);
+    list = list.filter(function(x){ return computeStatus(x.DueDate).kind === 'overdue'; });
+
+    if (todayViewEl) todayViewEl.style.display = 'none';
+    if (leadsWrapEl) leadsWrapEl.style.display = '';
+    if (listTitleEl) listTitleEl.textContent = 'Overdue Leads';
+
+    // Directly render the filtered list instead of calling the faulty applyFilters()
+    renderLeads(list); 
+
+  }).catch(function(err){ showError('Failed to load overdue leads'); try { console.error('[Overdue] error', err); } catch(_) {} });
+}
+      if (btnOverdue) btnOverdue.addEventListener('click', function(){ loadOverdue(); });
+      if (btnReports) btnReports.addEventListener('click', function(e){
+        e.preventDefault();
+        var url = 'reports.html?center=' + encodeURIComponent(center) + '&employeeCode=' + encodeURIComponent(employeeCode);
+        window.location.href = url;
+      });
+      var btnTA = document.getElementById('filterTodayAll');
+      var btnTO = document.getElementById('filterTodayOverdue');
+      var btnTP = document.getElementById('filterTodayPrev');
+      var btnTS = document.getElementById('filterTodaySoon');
+      var btnTD = document.getElementById('filterTodayDnp');
+      if (btnTA) btnTA.addEventListener('click', function(){ showOnly('all'); });
+      if (btnTO) btnTO.addEventListener('click', function(){ showOnly('overdue'); });
+      if (btnTP) btnTP.addEventListener('click', function(){ showOnly('prev'); });
+      if (btnTS) btnTS.addEventListener('click', function(){ showOnly('soon'); });
+      if (btnTD) btnTD.addEventListener('click', function(){ showOnly('dnp'); });
+
+      // Auto-load today's view by default
+      loadToday('all');
+      refreshFunnel();
+
+      var btnViewFunnel = document.getElementById('btnViewFunnel');
+      var leadFunnelContainer = document.getElementById('leadFunnelContainer');
+      var funnelHideTimer;
+
+      function showFunnel() {
+        leadFunnelContainer.classList.remove('funnel-hidden');
+        // Clear any existing timer
+        clearTimeout(funnelHideTimer);
+        // Start a new timer to hide the funnel after 60 seconds
+        funnelHideTimer = setTimeout(hideFunnel, 60000);
+      }
+
+      function hideFunnel() {
+        leadFunnelContainer.classList.add('funnel-hidden');
+        clearTimeout(funnelHideTimer);
+      }
+
+      if (btnViewFunnel) {
+        btnViewFunnel.addEventListener('click', function() {
+          if (leadFunnelContainer.classList.contains('funnel-hidden')) {
+            showFunnel();
+          } else {
+            hideFunnel();
+          }
+        });
+      }
+
+      // Initially hide the funnel when the page loads
+      hideFunnel();
+
+      // Auto-refresh Today every minute to pick newly due follow-ups
+      setInterval(function(){ if (todayViewEl.style.display !== 'none') { loadToday('all'); } }, 60000);
+    })();
+  </script>
+</body>
+</html>
+
