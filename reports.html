@@ -2,128 +2,183 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Reports</title>
+  <title>KPI Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { margin:0; font-family:'Poppins', sans-serif; background:#fdfaf6; }
-    .header { background:#f5c542; border:3px solid #4b0082; padding:12px 20px; font-weight:700; display:flex; justify-content:space-between; }
-    .wrap { padding:16px; max-width:1100px; margin:0 auto; }
-    .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
-    .controls input, .controls select { padding:8px; border:1px solid #d46a6a; border-radius:6px; font-family:'Poppins', sans-serif; }
-    .btn { padding:8px 12px; background:#e62222; color:#fff; border:2px solid #000; font-weight:700; cursor:pointer; box-shadow:3px 3px 0 #000; }
-    .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:10px; }
-    .card { background:#fff; border:1px solid #d46a6a; border-radius:8px; padding:12px; }
-    .grid { width:100%; border-collapse:collapse; margin-top:12px; }
-    .grid th, .grid td { border:1px solid #ddd; padding:8px; font-size:12px; }
-    .muted { color:#666; font-size:12px; }
-
-    /* Loading Bar CSS */
-    #loading-bar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 5px;
-        background-color: black;
-        z-index: 9999;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease-out;
-    }
-    #loading-bar.show {
-        transform: translateX(0);
-    }
+    body { margin:0; font-family:'Poppins', sans-serif; background:#f4f7f6; color: #333; }
+    .header { background:#4b0082; color: white; padding:15px 30px; font-weight:700; display:flex; justify-content:space-between; align-items: center; }
+    .wrap { padding:20px; max-width:1600px; margin:0 auto; }
+    .controls { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:20px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .controls input { padding:10px; border:1px solid #ccc; border-radius:6px; font-family:'Poppins', sans-serif; }
+    .btn { padding:10px 18px; background:#e62222; color:#fff; border:none; font-weight:700; cursor:pointer; border-radius: 6px; transition: background 0.2s; }
+    .btn:hover { background: #c01e1e; }
+    .kpi-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; }
+    .card { background:#fff; border-radius:8px; padding:20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .card .title { font-size: 1rem; color: #555; margin-bottom: 10px; }
+    .card .value { font-size: 2.5rem; font-weight: 700; color: #4b0082; }
+    .card .subtext { font-size: 0.8rem; color: #777; margin-top:5px;}
+    h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 40px; color: #4b0082;}
+    .status { font-weight: 600; margin-left: 15px; }
+    #reportDetails { margin-top: 20px; }
+    .day-card { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 15px; }
+    .day-header { font-weight: 700; font-size: 1.2rem; margin-bottom: 10px; }
+    .disposition-table { width: 100%; border-collapse: collapse; margin-top:10px; }
+    .disposition-table th, .disposition-table td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
   </style>
 </head>
 <body>
-  <div id="loading-bar"></div>
   <div class="header">
-    <div>Reports</div>
+    <div>KPI Dashboard</div>
     <div id="centreName">Centre</div>
   </div>
   <div class="wrap">
     <div class="controls">
       <input type="date" id="from" />
       <input type="date" id="to" />
-      <input type="text" id="employee" placeholder="Employee Code (optional)" />
-      <button class="btn" id="btnRun">Run</button>
-      <span class="muted" id="status"></span>
+      <button class="btn" id="btnRun">Run Report</button>
+      <div id="status" class="status"></div>
     </div>
-    <div class="cards">
-      <div class="card"><div>Total Actions Assigned</div><div id="c_assigned" style="font-size:24px; font-weight:700;">-</div></div>
-      <div class="card"><div>Total Actions Taken</div><div id="c_taken" style="font-size:24px; font-weight:700;">-</div></div>
-      <div class="card"><div>Actions Not Taken</div><div id="c_notTaken" style="font-size:24px; font-weight:700;">-</div></div>
+
+    <h2>High-Level Summary</h2>
+    <div class="kpi-grid">
+      <div class="card">
+        <div class="title">Total Assigned</div>
+        <div class="value" id="total-assigned">-</div>
+        <div class="subtext">Leads needing action in period</div>
+      </div>
+      <div class="card">
+        <div class="title">Total Actioned</div>
+        <div class="value" id="total-actioned">-</div>
+         <div class="subtext">Unique leads contacted</div>
+      </div>
+      <div class="card">
+        <div class="title">Total Due (Missed)</div>
+        <div class="value" id="total-due">-</div>
+         <div class="subtext">Assigned but not actioned</div>
+      </div>
+      <div class="card">
+        <div class="title">Completion Rate</div>
+        <div class="value" id="total-completion">-</div>
+        <div class="subtext">Actioned / Assigned</div>
+      </div>
     </div>
-    <div class="card" style="margin-top:12px;">
-      <div style="font-weight:700; margin-bottom:6px;">By Disposition</div>
-      <table class="grid" id="tblDisp"><thead><tr><th>Disposition</th><th>Count</th></tr></thead><tbody></tbody></table>
-    </div>
-    <div class="card" style="margin-top:12px;">
-      <div style="font-weight:700; margin-bottom:6px;">By Employee</div>
-      <table class="grid" id="tblEmp"><thead><tr><th>Employee</th><th>Count</th></tr></thead><tbody></tbody></table>
-    </div>
-    <div class="card" style="margin-top:12px;">
-      <div style="font-weight:700; margin-bottom:6px;">By Date</div>
-      <table class="grid" id="tblDate"><thead><tr><th>Date</th><th>Count</th></tr></thead><tbody></tbody></table>
-    </div>
+
+    <h2 id="details-header">Daily Breakup</h2>
+    <div id="reportDetails"></div>
+
   </div>
 
   <script>
     (function(){
+      // !!! IMPORTANT !!!
+      // PASTE YOUR NEW WEB APP URL FROM STEP 2 HERE
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbyMN6K8eieBsOEid-UCdGGAlVoCwSezicoYk50ltRYEKYTNsmmK1Vz98BSYMcSNNLSB/exec';
+
       function getQueryParam(name){ var p = new URLSearchParams(window.location.search); return p.get(name) || ''; }
-      var center = getQueryParam('center') || (function(){ try { return sessionStorage.getItem('center') || ''; } catch(_) { return ''; }})();
-      var API_BASE = 'https://script.google.com/macros/s/AKfycbykJTJYdBcxr459wnO4kYLdAj7JezT-BcH3EaTAL5YGxHJIHn8mJxyIPA3eHLMAavCWNw/exec';
-      var cn = document.getElementById('centreName'); if (cn) cn.textContent = center || 'Centre';
-      var btn = document.getElementById('btnRun');
+      var center = getQueryParam('center');
       var statusEl = document.getElementById('status');
+      var reportDetailsEl = document.getElementById('reportDetails');
 
-      var loadingBar = document.getElementById('loading-bar');
+      document.getElementById('centreName').textContent = center || 'Centre';
 
-      function showLoadingBar() {
-          if (loadingBar) {
-              loadingBar.classList.add('show');
-          }
+      function renderReport(report) {
+          let totalAssigned = 0, totalActioned = 0, totalDue = 0;
+          const sortedDates = Object.keys(report).sort((a, b) => new Date(b) - new Date(a)); // Newest first
+
+          reportDetailsEl.innerHTML = ''; // Clear previous results
+
+          sortedDates.forEach(date => {
+              const dayData = report[date];
+              totalAssigned += dayData.assignedCount;
+              totalActioned += dayData.actionedCount;
+              totalDue += dayData.dueActionsCount;
+
+              let dispositionHtml = 'No actions taken.';
+              if(Object.keys(dayData.dispositions).length > 0) {
+                  dispositionHtml = '<table class="disposition-table"><thead><tr><th>Disposition</th><th>Count</th></tr></thead><tbody>';
+                  for(const [action, count] of Object.entries(dayData.dispositions)) {
+                      dispositionHtml += `<tr><td>${action}</td><td>${count}</td></tr>`;
+                  }
+                  dispositionHtml += '</tbody></table>';
+              }
+
+              const dayCardHtml = `
+                  <div class="day-card">
+                      <div class="day-header">${new Date(date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                      <div class="kpi-grid">
+                          <div class="card"><div class="title">Assigned</div><div class="value">${dayData.assignedCount}</div></div>
+                          <div class="card"><div class="title">Actioned</div><div class="value">${dayData.actionedCount}</div></div>
+                          <div class="card"><div class="title">Due (Missed)</div><div class="value">${dayData.dueActionsCount}</div></div>
+                          <div class="card"><div class="title">Completion</div><div class="value">${dayData.completionPercentage.toFixed(1)}%</div></div>
+                      </div>
+                      <h3 style="margin-top: 20px;">Dispositions</h3>
+                      ${dispositionHtml}
+                  </div>
+              `;
+              reportDetailsEl.innerHTML += dayCardHtml;
+          });
+
+          // Update summary cards
+          document.getElementById('total-assigned').textContent = totalAssigned;
+          document.getElementById('total-actioned').textContent = totalActioned;
+          document.getElementById('total-due').textContent = totalDue;
+          const totalCompletion = totalAssigned > 0 ? ((totalActioned / totalAssigned) * 100).toFixed(1) + '%' : '0%';
+          document.getElementById('total-completion').textContent = totalCompletion;
+          document.getElementById('details-header').textContent = `Daily Breakup (${sortedDates.length} days)`;
       }
 
-      function hideLoadingBar() {
-          if (loadingBar) {
-              loadingBar.classList.remove('show');
-          }
+      function run() {
+        var from = document.getElementById('from').value;
+        var to = document.getElementById('to').value;
+        // NEW: Get employeeCode from the URL, just like the main dashboard does.
+        var employeeCode = getQueryParam('employeeCode'); 
+
+        if (!from || !to) {
+            statusEl.textContent = 'Please select a date range.';
+            statusEl.style.color = 'red';
+            return;
+        }
+        statusEl.textContent = 'Loading Report...';
+        statusEl.style.color = '#333';
+        reportDetailsEl.innerHTML = '';
+
+        // UPDATED: Added employeeCode to the API request URL.
+        var url = `${API_BASE}?action=advancedreportv2&center=${encodeURIComponent(center)}&from=${from}&to=${to}&employeeCode=${encodeURIComponent(employeeCode)}`;
+        fetch(url)
+            .then(r => r.json())
+            .then(data => {
+                // This part remains the same
+                if(data.ok && Object.keys(data.report).length > 0) {
+                    renderReport(data.report);
+                    statusEl.textContent = 'Report loaded successfully!';
+                    statusEl.style.color = 'green';
+                } else if (data.ok) {
+                    statusEl.textContent = 'No data found for this period.';
+                    statusEl.style.color = '#555';
+                } else {
+                    statusEl.textContent = 'Error: ' + (data.error || 'Unknown error');
+                    statusEl.style.color = 'red';
+                }
+            })
+            .catch(err => {
+                statusEl.textContent = 'Failed to fetch report. Check console for details.';
+                statusEl.style.color = 'red';
+                console.error(err);
+            });
       }
 
-      function setStatus(s){ if (statusEl) statusEl.textContent = s || ''; }
-      function renderTable(tbodyEl, map){
-        var keys = Object.keys(map || {}).sort();
-        tbodyEl.innerHTML = keys.map(function(k){ return '<tr><td>'+ (k||'-') +'</td><td>'+ map[k] +'</td></tr>'; }).join('');
-      }
-      function run(){
-        var from = document.getElementById('from').value || '';
-        var to = document.getElementById('to').value || '';
-        var emp = document.getElementById('employee').value || '';
-        if (!center){ setStatus('Missing centre'); return; }
-        setStatus('Loading...');
-        showLoadingBar(); // Show loading bar
-        var url = API_BASE + '?action=report&center=' + encodeURIComponent(center) + (from ? '&from='+from : '') + (to ? '&to='+to : '') + (emp ? '&employeeCode='+encodeURIComponent(emp) : '');
-        fetch(url).then(function(r){ return r.json(); }).then(function(data){
-          hideLoadingBar(); // Hide loading bar
-          setStatus('');
-          document.getElementById('c_assigned').textContent = (data.assigned != null ? data.assigned : '-');
-          document.getElementById('c_taken').textContent = (data.taken != null ? data.taken : '-');
-          document.getElementById('c_notTaken').textContent = (data.notTaken != null ? data.notTaken : '-');
-          renderTable(document.querySelector('#tblDisp tbody'), data.byDisposition || {});
-          renderTable(document.querySelector('#tblEmp tbody'), data.byEmployee || {});
-          renderTable(document.querySelector('#tblDate tbody'), data.byDate || {});
-        }).catch(function(err){
-          hideLoadingBar(); // Hide loading bar on error
-          setStatus('Error loading report'); console.error(err); });
-      }
-      if (btn) btn.addEventListener('click', function(e){ e.preventDefault(); run(); });
-      // default: last 7 days
-      var d = new Date(); var to = d.toISOString().slice(0,10); d.setDate(d.getDate()-7); var from = d.toISOString().slice(0,10);
-      document.getElementById('from').value = from; document.getElementById('to').value = to;
+      document.getElementById('btnRun').addEventListener('click', run);
+
+      // Default to last 7 days and run
+      var toDate = new Date();
+      var fromDate = new Date();
+      fromDate.setDate(toDate.getDate() - 6); // inclusive of today
+      document.getElementById('to').value = toDate.toISOString().slice(0,10);
+      document.getElementById('from').value = fromDate.toISOString().slice(0,10);
       run();
+
     })();
   </script>
 </body>
 </html>
-
