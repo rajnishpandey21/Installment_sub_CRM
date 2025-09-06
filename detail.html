@@ -491,7 +491,7 @@
         return;
       }
 
-      var API_BASE = 'https://script.google.com/macros/s/AKfycbykJTJYdBcxr459wnO4kYLdAj7JezT-BcH3EaTAL5YGxHJIHn8mJxyIPA3eHLMAavCWNw/exec';
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbw4rMF_ztvTeNUqYoTSkXlMcUmgw-KHcD6mqx3IV8-XYlq8jC_3gGPp-n-30YIuy6KuEw/exec';
 
       var listTitleEl = document.getElementById('listTitle');
       var leadsListEl = document.getElementById('leadsList');
@@ -541,6 +541,7 @@
         var amountDue = item.AmountDue || item.amount_due || '';
         var instStatus = item.Installment_Status || item.installment_status || '';
         var totalBal = item.total_balance_cr || item.total_balance || '';
+        var totalPayable = item.total_payable_cr || ''; // <-- CHANGE 1: Added this line
         var lastRemark = item.lastRemark || item.last_remark || '';
         var statusInfo = item.currentStatus ? { label: item.currentStatus, kind: 'dnp-overdue' } : computeStatus(dueDate);
 
@@ -561,6 +562,7 @@
           +     '<div class="label">Current status:<strong class="data">'+ statusInfo.label +'</strong></div>'
           +   '</div>'
           +   '<div class="lead-info">'
+          +     '<div class="label">Total Payable:<strong class="data">'+ formatCurrency(totalPayable) +'</strong></div>' // <-- CHANGE 2: Added this line
           +     '<div class="label">Due Amount:<strong class="data">'+ formatCurrency(amountDue) +'</strong></div>'
           +     '<div class="label">Total balance:<strong class="data">'+ formatCurrency(totalBal) +'</strong></div>'
           +     (lastRemark ? '<div class="label">Last Remarks:<strong class="data">'+ lastRemark +'</strong></div>' : '')
