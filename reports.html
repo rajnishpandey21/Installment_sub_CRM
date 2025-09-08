@@ -13,6 +13,7 @@
     .controls input { padding:10px; border:1px solid #ccc; border-radius:6px; font-family:'Poppins', sans-serif; }
     .btn { padding:10px 18px; background:#e62222; color:#fff; border:none; font-weight:700; cursor:pointer; border-radius: 6px; transition: background 0.2s; }
     .btn:hover { background: #c01e1e; }
+    .btn:disabled { background: #ccc; cursor: not-allowed; }
     .kpi-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; }
     .card { background:#fff; border-radius:8px; padding:20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
     .card .title { font-size: 1rem; color: #555; margin-bottom: 10px; }
@@ -20,7 +21,6 @@
     .card .subtext { font-size: 0.8rem; color: #777; margin-top:5px;}
     h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 40px; color: #4b0082;}
     .status { font-weight: 600; margin-left: 15px; }
-    #reportDetails { margin-top: 20px; }
     .day-card { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 15px; }
     .day-header { font-weight: 700; font-size: 1.2rem; margin-bottom: 10px; }
     .disposition-table { width: 100%; border-collapse: collapse; margin-top:10px; }
@@ -42,143 +42,140 @@
 
     <h2>High-Level Summary</h2>
     <div class="kpi-grid">
-      <div class="card">
-        <div class="title">Total Assigned</div>
-        <div class="value" id="total-assigned">-</div>
-        <div class="subtext">Leads needing action in period</div>
-      </div>
-      <div class="card">
-        <div class="title">Total Actioned</div>
-        <div class="value" id="total-actioned">-</div>
-         <div class="subtext">Unique leads contacted</div>
-      </div>
-      <div class="card">
-        <div class="title">Total Due (Missed)</div>
-        <div class="value" id="total-due">-</div>
-         <div class="subtext">Assigned but not actioned</div>
-      </div>
-      <div class="card">
-        <div class="title">Completion Rate</div>
-        <div class="value" id="total-completion">-</div>
-        <div class="subtext">Actioned / Assigned</div>
-      </div>
+      <div class="card"><div class="title">Total Assigned</div><div class="value" id="total-assigned">-</div><div class="subtext">Leads needing action in period</div></div>
+      <div class="card"><div class="title">Total Actioned</div><div class="value" id="total-actioned">-</div><div class="subtext">Unique leads contacted</div></div>
+      <div class="card"><div class="title">Total Due (Missed)</div><div class="value" id="total-due">-</div><div class="subtext">Assigned but not actioned</div></div>
+      <div class="card"><div class="title">Completion Rate</div><div class="value" id="total-completion">-</div><div class="subtext">Actioned / Assigned</div></div>
     </div>
 
     <h2 id="details-header">Daily Breakup</h2>
     <div id="reportDetails"></div>
-
   </div>
 
-  <script>
+<script>
     (function(){
-      // !!! IMPORTANT !!!
-      // PASTE YOUR NEW WEB APP URL FROM STEP 2 HERE
-      var API_BASE = 'https://script.google.com/macros/s/AKfycbyMN6K8eieBsOEid-UCdGGAlVoCwSezicoYk50ltRYEKYTNsmmK1Vz98BSYMcSNNLSB/exec';
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbxTHX4RNFV41cbFX8o6ataVhtVS13kiSiDS4uWizNeuZ3RKEOXpMBYivTWhYtvtiXg1sA/exec';
 
-      function getQueryParam(name){ var p = new URLSearchParams(window.location.search); return p.get(name) || ''; }
+      // --- Get counselor info from URL ---
+      function getQueryParam(name) {
+        var params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
       var center = getQueryParam('center');
+      var employeeCode = getQueryParam('employeeCode');
+
+      var fromEl = document.getElementById('from');
+      var toEl = document.getElementById('to');
+      var btnRun = document.getElementById('btnRun');
       var statusEl = document.getElementById('status');
       var reportDetailsEl = document.getElementById('reportDetails');
+      var detailsHeader = document.getElementById('details-header');
+      var centreNameDisplay = document.getElementById('centreName');
 
-      document.getElementById('centreName').textContent = center || 'Centre';
+      // --- Check if user is logged in ---
+      if (!center || !employeeCode) {
+        alert('Could not identify user. Please log in again.');
+        // Redirect to login page if you have one
+        // window.location.href = 'index.html'; 
+        return;
+      }
+      
+      centreNameDisplay.textContent = center;
+
+      function fetchJson(url) {
+        statusEl.textContent = 'Loading Report...';
+        btnRun.disabled = true;
+        return fetch(url).then(r => r.json()).finally(() => {
+          statusEl.textContent = '';
+          btnRun.disabled = false;
+        });
+      }
 
       function renderReport(report) {
-          let totalAssigned = 0, totalActioned = 0, totalDue = 0;
-          const sortedDates = Object.keys(report).sort((a, b) => new Date(b) - new Date(a)); // Newest first
+        let totalAssigned = 0, totalActioned = 0, totalDue = 0;
+        reportDetailsEl.innerHTML = '';
+        var sortedDates = Object.keys(report).sort((a, b) => new Date(b) - new Date(a));
 
-          reportDetailsEl.innerHTML = ''; // Clear previous results
+        if (sortedDates.length === 0) {
+          statusEl.textContent = 'No data found for this period.';
+          detailsHeader.textContent = 'Daily Breakup';
+          document.getElementById('total-assigned').textContent = '0';
+          document.getElementById('total-actioned').textContent = '0';
+          document.getElementById('total-due').textContent = '0';
+          document.getElementById('total-completion').textContent = '0.0%';
+          return;
+        }
 
-          sortedDates.forEach(date => {
-              const dayData = report[date];
-              totalAssigned += dayData.assignedCount;
-              totalActioned += dayData.actionedCount;
-              totalDue += dayData.dueActionsCount;
-
-              let dispositionHtml = 'No actions taken.';
-              if(Object.keys(dayData.dispositions).length > 0) {
-                  dispositionHtml = '<table class="disposition-table"><thead><tr><th>Disposition</th><th>Count</th></tr></thead><tbody>';
-                  for(const [action, count] of Object.entries(dayData.dispositions)) {
-                      dispositionHtml += `<tr><td>${action}</td><td>${count}</td></tr>`;
-                  }
-                  dispositionHtml += '</tbody></table>';
-              }
-
-              const dayCardHtml = `
-                  <div class="day-card">
-                      <div class="day-header">${new Date(date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
-                      <div class="kpi-grid">
-                          <div class="card"><div class="title">Assigned</div><div class="value">${dayData.assignedCount}</div></div>
-                          <div class="card"><div class="title">Actioned</div><div class="value">${dayData.actionedCount}</div></div>
-                          <div class="card"><div class="title">Due (Missed)</div><div class="value">${dayData.dueActionsCount}</div></div>
-                          <div class="card"><div class="title">Completion</div><div class="value">${dayData.completionPercentage.toFixed(1)}%</div></div>
-                      </div>
-                      <h3 style="margin-top: 20px;">Dispositions</h3>
-                      ${dispositionHtml}
-                  </div>
-              `;
-              reportDetailsEl.innerHTML += dayCardHtml;
-          });
-
-          // Update summary cards
-          document.getElementById('total-assigned').textContent = totalAssigned;
-          document.getElementById('total-actioned').textContent = totalActioned;
-          document.getElementById('total-due').textContent = totalDue;
-          const totalCompletion = totalAssigned > 0 ? ((totalActioned / totalAssigned) * 100).toFixed(1) + '%' : '0%';
-          document.getElementById('total-completion').textContent = totalCompletion;
-          document.getElementById('details-header').textContent = `Daily Breakup (${sortedDates.length} days)`;
+        sortedDates.forEach(date => {
+            const dayData = report[date];
+            totalAssigned += dayData.assignedCount;
+            totalActioned += dayData.actionedCount;
+            totalDue += dayData.dueActionsCount;
+            let dispositionHtml = 'No actions taken.';
+            if (Object.keys(dayData.dispositions).length > 0) {
+                dispositionHtml = '<table class="disposition-table"><thead><tr><th>Disposition</th><th>Count</th></tr></thead><tbody>';
+                for (const [action, count] of Object.entries(dayData.dispositions)) {
+                    dispositionHtml += `<tr><td>${action}</td><td>${count}</td></tr>`;
+                }
+                dispositionHtml += '</tbody></table>';
+            }
+            reportDetailsEl.innerHTML += `
+              <div class="day-card">
+                <div class="day-header">${new Date(date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+                <div class="kpi-grid">
+                  <div class="card"><div class="title">Assigned</div><div class="value">${dayData.assignedCount}</div></div>
+                  <div class="card"><div class="title">Actioned</div><div class="value">${dayData.actionedCount}</div></div>
+                  <div class="card"><div class="title">Due (Missed)</div><div class="value">${dayData.dueActionsCount}</div></div>
+                  <div class="card"><div class="title">Completion</div><div class="value">${dayData.completionPercentage.toFixed(1)}%</div></div>
+                </div>
+                <h3 style="margin-top: 20px;">Dispositions</h3>
+                ${dispositionHtml}
+              </div>`;
+        });
+        
+        const totalCompletion = totalAssigned > 0 ? `${((totalActioned / totalAssigned) * 100).toFixed(1)}%` : '0.0%';
+        document.getElementById('total-assigned').textContent = totalAssigned;
+        document.getElementById('total-actioned').textContent = totalActioned;
+        document.getElementById('total-due').textContent = totalDue;
+        document.getElementById('total-completion').textContent = totalCompletion;
+        detailsHeader.textContent = `Daily Breakup (${sortedDates.length} days)`;
       }
-
-      function run() {
-        var from = document.getElementById('from').value;
-        var to = document.getElementById('to').value;
-        // NEW: Get employeeCode from the URL, just like the main dashboard does.
-        var employeeCode = getQueryParam('employeeCode'); 
-
+      
+      function runReport() {
+        var from = fromEl.value;
+        var to = toEl.value;
+        
         if (!from || !to) {
-            statusEl.textContent = 'Please select a date range.';
-            statusEl.style.color = 'red';
+            statusEl.textContent = 'Please select a valid date range.';
             return;
         }
-        statusEl.textContent = 'Loading Report...';
-        statusEl.style.color = '#333';
-        reportDetailsEl.innerHTML = '';
 
-        // UPDATED: Added employeeCode to the API request URL.
         var url = `${API_BASE}?action=advancedreportv2&center=${encodeURIComponent(center)}&from=${from}&to=${to}&employeeCode=${encodeURIComponent(employeeCode)}`;
-        fetch(url)
-            .then(r => r.json())
-            .then(data => {
-                // This part remains the same
-                if(data.ok && Object.keys(data.report).length > 0) {
-                    renderReport(data.report);
-                    statusEl.textContent = 'Report loaded successfully!';
-                    statusEl.style.color = 'green';
-                } else if (data.ok) {
-                    statusEl.textContent = 'No data found for this period.';
-                    statusEl.style.color = '#555';
-                } else {
-                    statusEl.textContent = 'Error: ' + (data.error || 'Unknown error');
-                    statusEl.style.color = 'red';
-                }
-            })
-            .catch(err => {
-                statusEl.textContent = 'Failed to fetch report. Check console for details.';
-                statusEl.style.color = 'red';
-                console.error(err);
-            });
+        
+        fetchJson(url).then(data => {
+            if (data.ok) {
+                renderReport(data.report);
+                statusEl.textContent = 'Report loaded successfully!';
+            } else {
+                statusEl.textContent = `Error: ${data.error || 'Unknown error'}`;
+            }
+        }).catch(() => statusEl.textContent = 'Failed to fetch report.');
       }
 
-      document.getElementById('btnRun').addEventListener('click', run);
+      // --- Event Listener and Initial Load ---
+      btnRun.addEventListener('click', runReport);
 
-      // Default to last 7 days and run
+      // Set default dates to the last 7 days
       var toDate = new Date();
       var fromDate = new Date();
-      fromDate.setDate(toDate.getDate() - 6); // inclusive of today
-      document.getElementById('to').value = toDate.toISOString().slice(0,10);
-      document.getElementById('from').value = fromDate.toISOString().slice(0,10);
-      run();
+      fromDate.setDate(toDate.getDate() - 6);
+      toEl.value = toDate.toISOString().slice(0, 10);
+      fromEl.value = fromDate.toISOString().slice(0, 10);
+      
+      // Automatically run the report when the page loads
+      runReport();
 
     })();
-  </script>
+</script>
 </body>
 </html>
