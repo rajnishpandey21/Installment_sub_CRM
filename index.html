@@ -61,7 +61,7 @@
             top: 0;
             height: 100vh;
             width: calc(50vw - (var(--panel-width) + var(--panel-gap)) / 2);
-            background: var(--primary-yellow);
+            background: #1434A4; /* Royal blue */
             z-index: -1;
             pointer-events: none;
         }
@@ -95,7 +95,7 @@
         }
 
         .right-panel {
-            background-color: var(--primary-yellow);
+            background-color: #1434A4; /* Royal blue */
             transform: translateY(30px);
         }
 
@@ -148,8 +148,26 @@
         .right-panel .subtext {
             font-size: clamp(0.9rem, 1vw, 1rem);
             font-weight: 500;
-            color: var(--text-dark);
+            color: #ffffff;
             margin-bottom: 3vh; /* Reduced margin */
+        }
+
+        /* Overlay only on the white canvas (not on the royal-blue strip) */
+        :root { --overlay-opacity: 0.18; }
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            /* Start exactly where the white canvas begins (mirrors .bg-split width) */
+            left: calc(50vw - (var(--panel-width) + var(--panel-gap)) / 2);
+            right: 0;
+            z-index: -1; /* behind all content, above the blue strip */
+            pointer-events: none; /* purely decorative */
+            opacity: var(--overlay-opacity);
+            background: url('BACKGROUND_OVERLAY.svg') center center / cover no-repeat;
+        }
+        @media (max-width: 768px){
+            .bg-overlay{ left: 0; }
         }
 
         .login-form {
@@ -283,37 +301,32 @@
             bottom: 3vh; /* Reduced position from bottom */
             width: clamp(50px, 4vw, 60px);
             height: clamp(50px, 4vw, 60px);
-            background-color: var(--primary-yellow);
+            background-color: #FFC107 !important; /* Gold accent */
             border: none;
-            border-radius: 50%;
+            border-radius: 9999px; /* Fully rounded */
             display: flex;
             justify-content: center;
             align-items: center;
-            color: var(--text-dark);
+            color: #111111 !important;
             font-size: clamp(1.2rem, 1.5vw, 1.5rem);
             cursor: pointer;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            transition: transform 0.08s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .right-panel .nav-button {
-            background-color: var(--white);
-        }
+        .right-panel .nav-button { background-color: #FFC107 !important; color: #111111 !important; }
         
-        .nav-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
+        .nav-button:hover { background-color: #E0AB06 !important; transform: translateY(-1px); }
         
-        .nav-button:active {
-            transform: scale(0.98);
-        }
+        .nav-button:active { background-color: #C99705 !important; transform: translateY(0); }
 
         .error-text {
             color: #b00020;
             font-size: 0.85rem;
             margin-top: 6px;
         }
+        .right-panel h2 { color: #ffffff; }  /* or your desired color */
     </style>
 </head>
 <body>
@@ -380,12 +393,13 @@
     </div>
 
     <div class="bg-split"></div>
+    <div class="bg-overlay"></div>
     <div id="loading-bar"></div>
 
     <script>
         (function () {
             // API_BASE and utility functions should be at a scope accessible to doLogin
-            var API_BASE = 'https://script.google.com/macros/s/AKfycbxTHX4RNFV41cbFX8o6ataVhtVS13kiSiDS4uWizNeuZ3RKEOXpMBYivTWhYtvtiXg1sA/exec';
+            var API_BASE = 'https://script.google.com/macros/s/AKfycbw08byvqEmvWlXdPgy_g70nuPFJJ-n1jYone1ZjEwhuPvGWqFk3ilLJWGMp52xxuFxtBA/exec';
 
             var loadingBar = document.getElementById('loading-bar');
 
