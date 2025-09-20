@@ -527,7 +527,7 @@
         return;
       }
 
-      var API_BASE = 'https://script.google.com/macros/s/AKfycbxsUHuyF7offNKjb2JGSTigWTEE4sX6AQtqKXEcGdBsQBrNW8eTCVbJrKqPd746lvOeIA/exec';
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbxZpRXqgawJcT-oSu4ou6ZaCmiZSVH0mxTcHFNOtMcFTgdJzT9zHInDU_4cHXloJp3yvA/exec';
       var listTitleEl = document.getElementById('listTitle');
       var leadsListEl = document.getElementById('leadsList');
       var leadsWrapEl = leadsListEl ? leadsListEl.parentElement : null;
@@ -717,7 +717,7 @@ function loadToday(){
           
           var leads = data.sections.allLeads || [];
           
-          // --- FINAL, ROBUST PRIORITY SORTING LOGIC ---
+          // --- NEW SORTING LOGIC ---
           const priorityMap = {
               'overdue': 1,   // Overdue Followup
               'dnp': 2,       // Old DNP/SO
@@ -726,16 +726,27 @@ function loadToday(){
               'untouched': 5  // Untouched from Yesterday
           };
 
-          // This helper function safely gets the highest priority for a lead.
           function getLeadPriority(lead) {
-              if (!lead.categories || lead.categories.length === 0) {
-                  return 99; // If no categories, give it the lowest priority.
-              }
+              if (!lead.categories || lead.categories.length === 0) return 99;
               let priorities = lead.categories.map(cat => priorityMap[cat] || 99);
               return Math.min.apply(null, priorities);
           }
 
           leads.sort(function(a, b) {
+              var dateA = a.DueDate ? new Date(a.DueDate) : null;
+              var dateB = b.DueDate ? new Date(b.DueDate) : null;
+
+              // Handle cases where one or both dates are missing
+              if (!dateA && !dateB) return 0;
+              if (!dateA) return 1; // Put leads without dates at the end
+              if (!dateB) return -1;
+
+              // Primary sort by date
+              if (dateA.getTime() !== dateB.getTime()) {
+                  return dateA.getTime() - dateB.getTime();
+              }
+
+              // Secondary sort by priority if dates are the same
               let priorityA = getLeadPriority(a);
               let priorityB = getLeadPriority(b);
               return priorityA - priorityB;
@@ -1089,4 +1100,3 @@ if (searchRegnoEl) searchRegnoEl.addEventListener('input', renderTodayLeads);
   </script>
 </body>
 </html>
-
