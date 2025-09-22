@@ -55,7 +55,7 @@
 
 <script>
     (function(){
-      var API_BASE = 'https://script.google.com/macros/s/AKfycbxZpRXqgawJcT-oSu4ou6ZaCmiZSVH0mxTcHFNOtMcFTgdJzT9zHInDU_4cHXloJp3yvA/exec';
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbyVQy8LPx3XcHNSYbycKlz3MruS3d-rRIm_IyDMDP7wKjjgEGu1-LvPOuXiAWUbFEYuhQ/exec';
       function getQueryParam(name) {
         var params = new URLSearchParams(window.location.search);
         return params.get(name) || '';
@@ -70,7 +70,7 @@
       var reportDetailsEl = document.getElementById('reportDetails');
       var detailsHeader = document.getElementById('details-header');
       var centreNameDisplay = document.getElementById('centreName');
-
+      fromEl.min = '2025-09-21';
       // --- Check if user is logged in ---
       if (!center || !employeeCode) {
         alert('Could not identify user. Please log in again.');
