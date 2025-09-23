@@ -460,12 +460,11 @@
       <div class="relative-wrap">
         <div class="leads-list" id="todayView" style="display:none; margin-top:10px;">
         <div class="content-header" style="margin:-10px -10px 10px -10px; border-radius:5px;">
-          <span>Today</span>
-          <div class="controls" id="todayCounters">
-            <span id="actionsTodayCounter" style="margin-right:10px;">Actions Taken Today: 0</span>
-            <span id="leadsAvailableCounter">Leads Available: 0</span>
-          </div>
-        </div>
+  <span>Today</span>
+  <div class="controls" id="counselorInfo">
+    <span id="employeeCodeDisplay" style="font-weight: 600;"></span>
+  </div>
+</div>
         <div class="controls" style="margin: 0 0 10px 0;">
 <button class="act-btn" id="filterTodayAll" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#777;">All</button>
 <button class="act-btn" id="filterTodayOverdue" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#c62828;">Overdue Followup</button>
@@ -520,14 +519,44 @@
 
       var center = getQueryParam('center') || (sessionStorage.getItem('center') || '');
       var employeeCode = getQueryParam('employeeCode') || (sessionStorage.getItem('employeeCode') || '');
- 
       document.getElementById('centreName').textContent = center || 'Centre Name';
       if (!center || !employeeCode) {
         window.location.replace('index.html');
         return;
       }
 
-      var API_BASE = 'https://script.google.com/macros/s/AKfycbw3v7nfUWw6p1Ow-tUgE6OlK3wkHkZ7YTw5t8IaNqz5jgwQw7vcbLN0zkNbgCTcEqWSUw/exec';
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbyATv3iwTAidwXcymASVC0qi6XIoaqvWnGk5x1pVfYCpG6mo-1EbVZOAIcug-lbB-EyFQ/exec';
+      // New snippet to fetch counselor name and display it with the ID
+(function setCounselorName() {
+  var displayEl = document.getElementById('employeeCodeDisplay');
+  if (!displayEl) return;
+
+  // Set a default value first
+  displayEl.textContent = 'Counselor: ' + employeeCode;
+
+  // Fetch the list of counselors for the center
+  var url = API_BASE + '?action=getcounselors&center=' + encodeURIComponent(center);
+
+  fetch(url)
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+      if (data && data.ok && Array.isArray(data.counselors)) {
+        // Find the current counselor in the returned list
+        var currentCounselor = data.counselors.find(function(c) {
+          return c.employeeId === employeeCode;
+        });
+
+        if (currentCounselor && currentCounselor.name) {
+          // If found, update the display with Name and ID
+          displayEl.textContent = currentCounselor.name + ' (' + employeeCode + ')';
+        }
+      }
+    })
+    .catch(function(error) {
+      console.error("Could not fetch counselor's name:", error);
+      // If there's an error, the display will keep the default value
+    });
+})();
       var listTitleEl = document.getElementById('listTitle');
       var leadsListEl = document.getElementById('leadsList');
       var leadsWrapEl = leadsListEl ? leadsListEl.parentElement : null;
@@ -562,62 +591,69 @@
         try { return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(n || 0)); } catch(_) { return '₹' + (n || 0); }
       }
 
-      function buildLeadCard(item){
-        var regno = item.regno || '';
-        var statusInfo = item.currentStatus ? { label: item.currentStatus } : computeStatus(item.DueDate);
+function buildLeadCard(item, showActNowButton){
+  var regno = item.regno || '';
+  var statusInfo = item.currentStatus ? { label: item.currentStatus } : computeStatus(item.DueDate);
 
-        var el = document.createElement('div');
-        el.className = 'lead-item';
-        el.setAttribute('data-regno', String(regno));
-        // Add data-categories attribute for filtering
-        el.setAttribute('data-categories', (item.categories || []).join(' '));
-        
-        el.innerHTML = (
-          '<div class="lead-details-wrapper">'
-          + '<i class="fa fa-user-circle lead-avatar"></i>'
-          + '<div class="lead-info-columns">'
-          +   '<div class="lead-info">'
-          +     '<div><span class="label">Registered Number:</span><strong class="data">'+ (regno || '-') +'</strong></div>'
-          +     '<div><span class="label new-field">Name:</span><strong class="data new-field">'+ (item.name || '-') +'</strong></div>'
-          +     '<div><span class="label new-field">Phone Number:</span><strong class="data new-field">'+ (item.phoneNumber || '-') +'</strong></div>'
-          +     '<div><span class="label">Source:</span><strong class="data">'+ (item.source_name || '-') +'</strong></div>'
-          +     '<div><span class="label">Installment status:</span><strong class="data">'+ (item.Installment_Status || '-') +'</strong></div>'
-          +     '<div><span class="label">Due date:</span><strong class="data">'+ (item.DueDate || '-') +'</strong></div>'
-          +     '<div><span class="label">Current status:</span><strong class="data">'+ statusInfo.label +'</strong></div>'
-          +   '</div>'
-          +   '<div class="lead-info">'
-          +     '<div><span class="label">Total Payable:</span><strong class="data">'+ formatCurrency(item.total_payable_cr) +'</strong></div>'
-          +     '<div><span class="label">Due Amount:</span><strong class="data">'+ formatCurrency(item.AmountDue) +'</strong></div>'
-          +     '<div><span class="label">Total balance:</span><strong class="data">'+ formatCurrency(item.total_balance_cr) +'</strong></div>'
-          +     (item.lastRemark ? '<div><span class="label">Last Remarks:</span><strong class="data">'+ item.lastRemark +'</strong></div>' : '')
-          +     (item.attemptNo ? '<div><span class="label">Attempt:</span><strong class="data">'+ item.attemptNo +'</strong></div>' : '')
-          +     (item.lastActionAt ? '<div><span class="label">Last Action:</span><strong class="data">'+ item.lastActionAt +'</strong></div>' : '')
-          +   '</div>'
-          + '</div>'
-          + '</div>'
-          + '<div class="actions-wrapper">'
-          +   '<button class="act-btn">ACT NOW</button>'
-          +   (item.attemptNo ? '<div class="stamp">Attempt '+ item.attemptNo +'</div>' : '')
-          + '</div>'
-        );
+  var el = document.createElement('div');
+  el.className = 'lead-item';
+  el.setAttribute('data-regno', String(regno));
+  el.setAttribute('data-categories', (item.categories || []).join(' '));
 
-        var actBtn = el.querySelector('.act-btn');
-        actBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleActionMenu(el, regno); });
-        var avatar = el.querySelector('.lead-avatar');
-        if (avatar) {
-            avatar.style.cursor = 'pointer'; // Make it look clickable
-            avatar.setAttribute('title', 'Click to Debug Lead\nShift+Click to View History');
-            avatar.addEventListener('click', function(e){ 
-                e.stopPropagation(); 
-                if (e.shiftKey) {
-                    openHistoryModal(regno);
-                } else {
-                    runLeadDebugger(regno);
-                }
-            });
-        }
-        return el;
-      }
+  var actionButtonHtml = '';
+  if (showActNowButton) {
+    actionButtonHtml = '<button class="act-btn">ACT NOW</button>';
+  }
+
+  el.innerHTML = (
+    '<div class="lead-details-wrapper">'
+    + '<i class="fa fa-user-circle lead-avatar"></i>'
+    + '<div class="lead-info-columns">'
+    +   '<div class="lead-info">'
+    +     '<div><span class="label">Registered Number:</span><strong class="data">'+ (regno || '-') +'</strong></div>'
+    +     '<div><span class="label new-field">Name:</span><strong class="data new-field">'+ (item.name || '-') +'</strong></div>'
+    +     '<div><span class="label new-field">Phone Number:</span><strong class="data new-field">'+ (item.phoneNumber || '-') +'</strong></div>'
+    +     '<div><span class="label">Source:</span><strong class="data">'+ (item.source_name || '-') +'</strong></div>'
+    +     '<div><span class="label">Installment status:</span><strong class="data">'+ (item.Installment_Status || '-') +'</strong></div>'
+    +     '<div><span class="label">Due date:</span><strong class="data">'+ (item.DueDate || '-') +'</strong></div>'
+    +     '<div><span class="label">Current status:</span><strong class="data">'+ statusInfo.label +'</strong></div>'
+    +   '</div>'
+    +   '<div class="lead-info">'
+    +     '<div><span class="label">Total Payable:</span><strong class="data">'+ formatCurrency(item.total_payable_cr) +'</strong></div>'
+    +     '<div><span class="label">Due Amount:</span><strong class="data">'+ formatCurrency(item.AmountDue) +'</strong></div>'
+    +     '<div><span class="label">Total balance:</span><strong class="data">'+ formatCurrency(item.total_balance_cr) +'</strong></div>'
+    +     (item.lastRemark ? '<div><span class="label">Last Remarks:</span><strong class="data">'+ item.lastRemark +'</strong></div>' : '')
+    +     (item.attemptNo ? '<div><span class="label">Attempt:</span><strong class="data">'+ item.attemptNo +'</strong></div>' : '')
+    +     (item.lastActionAt ? '<div><span class="label">Last Action:</span><strong class="data">'+ item.lastActionAt +'</strong></div>' : '')
+    +   '</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="actions-wrapper">'
+    +   actionButtonHtml
+    +   (item.attemptNo ? '<div class="stamp">Attempt '+ item.attemptNo +'</div>' : '')
+    + '</div>'
+  );
+
+  if (showActNowButton) {
+    var actBtn = el.querySelector('.act-btn');
+    actBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleActionMenu(el, regno); });
+  }
+
+  var avatar = el.querySelector('.lead-avatar');
+  if (avatar) {
+      avatar.style.cursor = 'pointer';
+      avatar.setAttribute('title', 'Click to Debug Lead\\nShift+Click to View History');
+      avatar.addEventListener('click', function(e){ 
+          e.stopPropagation(); 
+          if (e.shiftKey) {
+              openHistoryModal(regno);
+          } else {
+              runLeadDebugger(regno);
+          }
+      });
+  }
+  return el;
+}
 
       function computeStatus(dueDate){
         if (!dueDate) return { label: '-', kind: '' };
@@ -684,7 +720,7 @@
 
         // If a lead has a primary category and a container for it, add it
         if (leadPrimaryCategory && containers[leadPrimaryCategory]) {
-            containers[leadPrimaryCategory].appendChild(buildLeadCard(lead));
+            containers[leadPrimaryCategory].appendChild(buildLeadCard(lead, true)); // We pass true to show the button
             leadsFound++;
         }
     });
@@ -756,10 +792,7 @@ function loadToday(){
           // Store the now-sorted master list of leads
           lastTodayData = leads;
           
-          // Update the counters
-          var counters = data.counters || {};
-          document.getElementById('actionsTodayCounter').textContent = 'Actions Taken Today: ' + (counters.actionsToday || 0);
-          document.getElementById('leadsAvailableCounter').textContent = 'Live Leads Available: ' + (counters.todayPoolAll || 0);
+
 
           // Call the rendering function to display the leads
           renderTodayLeads();
@@ -778,7 +811,7 @@ function loadToday(){
           return;
         }
         visible.forEach(function(item){
-          leadsListEl.appendChild(buildLeadCard(item));
+          leadsListEl.appendChild(buildLeadCard(item, false)); // We pass false to hide the button
         });
       }
 
