@@ -55,7 +55,7 @@
 
 <script>
     (function(){
-      var API_BASE = 'https://script.google.com/macros/s/AKfycbyVQy8LPx3XcHNSYbycKlz3MruS3d-rRIm_IyDMDP7wKjjgEGu1-LvPOuXiAWUbFEYuhQ/exec';
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbyATv3iwTAidwXcymASVC0qi6XIoaqvWnGk5x1pVfYCpG6mo-1EbVZOAIcug-lbB-EyFQ/exec';
       function getQueryParam(name) {
         var params = new URLSearchParams(window.location.search);
         return params.get(name) || '';
@@ -71,11 +71,9 @@
       var detailsHeader = document.getElementById('details-header');
       var centreNameDisplay = document.getElementById('centreName');
       fromEl.min = '2025-09-21';
-      // --- Check if user is logged in ---
+
       if (!center || !employeeCode) {
         alert('Could not identify user. Please log in again.');
-        // Redirect to login page if you have one
-        // window.location.href = 'index.html'; 
         return;
       }
       
@@ -106,10 +104,19 @@
         }
 
         sortedDates.forEach(date => {
-            const dayData = report[date];
+            const dayData = report[date] ? report[date][employeeCode] : null;
+
+            if (!dayData) return;
+
+            dayData.dueActionsCount = dayData.assignedCount - dayData.actionedCount;
+            dayData.completionPercentage = dayData.assignedCount > 0 ? (dayData.actionedCount / dayData.assignedCount) * 100 : 0;
+            
             totalAssigned += dayData.assignedCount;
+            // ### THIS IS THE FIX ###
+            // Corrected "day_data" to "dayData"
             totalActioned += dayData.actionedCount;
             totalDue += dayData.dueActionsCount;
+
             let dispositionHtml = 'No actions taken.';
             if (Object.keys(dayData.dispositions).length > 0) {
                 dispositionHtml = '<table class="disposition-table"><thead><tr><th>Disposition</th><th>Count</th></tr></thead><tbody>';
@@ -148,7 +155,7 @@
             statusEl.textContent = 'Please select a valid date range.';
             return;
         }
-
+        
         var url = `${API_BASE}?action=advancedreportv2&center=${encodeURIComponent(center)}&from=${from}&to=${to}&employeeCode=${encodeURIComponent(employeeCode)}`;
         
         fetchJson(url).then(data => {
@@ -161,17 +168,14 @@
         }).catch(() => statusEl.textContent = 'Failed to fetch report.');
       }
 
-      // --- Event Listener and Initial Load ---
       btnRun.addEventListener('click', runReport);
 
-      // Set default dates to the last 7 days
       var toDate = new Date();
       var fromDate = new Date();
       fromDate.setDate(toDate.getDate() - 6);
       toEl.value = toDate.toISOString().slice(0, 10);
       fromEl.value = fromDate.toISOString().slice(0, 10);
       
-      // Automatically run the report when the page loads
       runReport();
 
     })();
