@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Physics Wallah - Admissions 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff; 
+    }
+
+    /* Header */
+    .header {
+      background: #1434A4;
+      color: #ffffff;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      border: 3px solid #0F2C81;
+      font-size: 22px;
+    }
+
+    /* Main container */
+    .container {
+      display: flex;
+      padding: 15px;
+      gap: 15px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 30%;
+      flex-shrink: 0;
+    }
+
+    .box {
+      background: #E9EEF8;
+      color: #0D1B2A;
+      padding: 8px 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* --- Unified Button Theme (Option A: Royal Blue + Gold) --- */
+    .act-btn {
+      font-size: 14px;
+      padding: 10px 20px;
+      background: #FFC107 !important; /* Gold accent */
+      color: #111111 !important;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: none !important;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.08s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12) !important;
+      border-radius: 9999px; /* Fully rounded */
+      font-family: 'Poppins', sans-serif;
+      flex-shrink: 0;
+    }
+
+    .act-btn:hover {
+      background: #E0AB06 !important;
+      transform: translateY(-1px);
+    }
+
+    .act-btn:active {
+      background: #C99705 !important;
+      transform: translateY(0);
+    }
+
+    /* --- FUNNEL STYLES --- */
+    .funnel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .funnel-stage {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .funnel-stage:last-child {
+        margin-bottom: 0;
+    }
+
+    .funnel-stage:hover {
+      transform: scale(1.03);
+    }
+
+    .funnel-stage::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      border-top: none;
+      box-sizing: border-box;
+    }
+
+    .funnel-stage::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 25px;
+      border-radius: 50%;
+      z-index: 1;
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 8px 10px -3px rgba(0, 0, 0, 0.5);
+    }
+
+    .stage-text {
+      position: relative;
+      z-index: 3;
+      color: white;
+      font-weight: 600;
+      text-align: center;
+      padding: 0 5px;
+      padding-top: 4px;
+    }
+
+    .funnel-stage.s1 { width: 95%; height: 45px; z-index: 5; }
+    .funnel-stage.s1 .stage-text { font-size: 16px; }
+    .funnel-stage.s1::before { background: linear-gradient(to bottom, #f08a89, #e87a79); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s1::after { background: #e87a79; }
+    .funnel-stage.s2 { width: 80.75%; height: 45px; z-index: 4; }
+    .funnel-stage.s2 .stage-text { font-size: 15px; }
+    .funnel-stage.s2::before { background: linear-gradient(to bottom, #8f6dd1, #7e57c2); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s2::after { background: #7e57c2; }
+    .funnel-stage.s3 { width: 68.6%; height: 45px; z-index: 3; }
+    .funnel-stage.s3 .stage-text { font-size: 14px; }
+    .funnel-stage.s3::before { background: linear-gradient(to bottom, #60d9e9, #4dd0e1); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s3::after { background: #4dd0e1; }
+    .funnel-stage.s4 { width: 58.3%; height: 45px; z-index: 2; }
+    .funnel-stage.s4 .stage-text { font-size: 12px; color: #333; }
+    .funnel-stage.s4::before { background: linear-gradient(to bottom, #ffe370, #ffd54f); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s4::after { background: #ffd54f; }
+    .funnel-stage.s5 { width: 49.5%; height: 45px; z-index: 1; }
+    .funnel-stage.s5 .stage-text { font-size: 11px; color: #333; }
+    .funnel-stage.s5::before { background: linear-gradient(to bottom, #ffca4a, #ffc107); clip-path: polygon(0% 12px, 100% 12px, 85% 100%, 15% 100%); }
+    .funnel-stage.s5::after { background: #ffc107; }
+
+    /* --- CONTENT AREA & LEAD LIST --- */
+    .content {
+      width: 70%;
+      flex-grow: 1; /* Allow content to grow */
+    }
+
+    .content-header {
+      background: #E9EEF8;
+      color: #0D1B2A;
+      padding: 10px 15px;
+      border-radius: 5px 5px 0 0;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .icons i { margin-left: 12px; cursor: pointer; transition: 0.2s; }
+    .icons i:hover { transform: scale(1.2); color: #FFC107; }
+
+    /* Header controls: filters + search */
+    .controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .controls select, .controls input {
+      background: #fff;
+      border: 1px solid #D9E2FF;
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      color: #333;
+    }
+    .controls input { width: 160px; }
+
+    .leads-list {
+      background: #F6F8FC;
+      border: 1px solid #D9E2FF;
+      border-top: none;
+      padding: 10px;
+      border-radius: 0 0 5px 5px;
+    }
+    
+    /* --- FULLY REVISED LEAD ITEM STYLES --- */
+    .lead-item {
+      background: #FFFFFF;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      border: 1px solid #D9E2FF;
+    }
+    .lead-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .lead-details-wrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .lead-avatar {
+      font-size: 32px;
+      color: #555;
+      margin-top: 5px;
+    }
+    
+    .lead-info-columns {
+        display: flex;
+        gap: 40px;
+    }
+
+    .lead-info {
+      color: #555;
+      line-height: 1.7;
+      font-size: 12px;
+    }
+    
+    .lead-info .label {
+        font-weight: 400;
+        color: #666;
+    }
+    
+    .lead-info .data {
+        font-weight: 600;
+        color: #000;
+        margin-left: 8px;
+    }
+
+    .lead-info span.label {
+      font-weight: bold;
+      color: #c62828;
+    }
+     .lead-info span .data {
+      font-weight: bold;
+      color: #c62828;
+    }
+
+    .lead-info .label.new-field {
+        color: #007bff;
+    }
+    .lead-info .data.new-field {
+        color: #333;
+    }
+    
+    /* --- NEW STYLES for right-side actions --- */
+    .actions-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers the stamp under the button */
+        gap: 8px; /* Space between button and stamp */
+    }
+
+    .stamp {
+      /* Removed absolute positioning */
+      font-size: 14px;
+      font-weight: 700;
+      color: red;
+      border: 2px solid red;
+      border-radius: 4px;
+      padding: 2px 8px;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+  <style>
+    /* Loading Bar CSS */
+    #loading-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background-color: black;
+        z-index: 9999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+    }
+    #loading-bar.show {
+        transform: translateX(0);
+    }
+
+    /* Action dropdown */
+    .action-menu {
+      position: absolute;
+      right: 15px;
+      top: 55px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 20;
+      overflow: hidden;
+    }
+    .action-menu button {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      background: #fff;
+      border: 0;
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      border-radius: 9999px; /* Rounded menu items to match theme */
+    }
+    .action-menu button:hover { background: #f7f2e7; }
+
+    /* Follow-up modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      width: 320px;
+      border: 1px solid #d46a6a;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .modal h3 { margin: 0 0 10px 0; font-size: 16px; }
+    .modal label { display: block; font-size: 12px; margin: 10px 0 6px; }
+    .modal input[type="datetime-local"] { width: 100%; padding: 8px; font-family: 'Poppins', sans-serif; }
+    .modal .actions { margin-top: 12px; display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-secondary { background: #eeeeee; border: none; padding: 8px 14px; cursor: pointer; border-radius: 9999px; font-family: 'Poppins', sans-serif; }
+    .btn-primary { background: #c23b3b; color: #ffffff; border: none; padding: 8px 14px; cursor: pointer; border-radius: 9999px; font-weight: 700; box-shadow: none; font-family: 'Poppins', sans-serif; }
+    /* Loading spinner */
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .spinner {
+      width: 28px; height: 28px; border: 4px solid #f3f3f3; border-top: 4px solid #d46a6a; border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .loading-overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.6); z-index: 50;
+    }
+    .relative-wrap { position: relative; }
+    /* Toast */
+    .toast {
+      position: fixed; right: 16px; bottom: 16px; background:#333; color:#fff; padding:10px 14px; border-radius:6px; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:9999; opacity:0; transform:translateY(10px); transition: all .2s ease;
+    }
+    .toast.show { opacity:1; transform:translateY(0); }
+
+    /* --- Style for the active filter button --- */
+.act-btn.filter-active {
+    background: #1434A4 !important;
+    color: #ffffff !important;
+}
+
+    /* --- Styles for Priority Group Headings --- */
+#todayLeadsContainer h3 {
+    background-color: #1434A4; /* Royal blue */
+    color: white;
+    padding: 8px 12px;
+    margin: 20px 0 10px 0; /* Adds some space above the very first group */
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#todayLeadsContainer h3:first-child {
+    margin-top: 0; /* Removes the extra space above the very first group */
+}
+
+  </style>
+  <style>
+    /* New style to hide the funnel */
+    .funnel-hidden {
+      display: none !important;
+    }
+
+    /* Adjust the funnel to allow for button positioning */
+    .box.lead-funnel-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loading-bar"></div>
+
+  <div class="header">
+    <div>Physics Wallah</div>
+    <div>Admissions 2025</div>
+    <div id="centreName">Centre Name</div>
+  </div>
+
+  <div class="container">
+
+    <div class="sidebar">
+      <div class="box">
+        <span>Today's Flow</span>
+        <button class="act-btn" id="btnSidebarActNow" style="font-size: 11px; padding: 8px 12px; box-shadow: 3px 3px 0px black;">ACT NOW</button>
+      </div>
+      <div class="box lead-funnel-box">
+        <span>Lead funnel</span>
+        <button class="act-btn" id="btnViewFunnel" style="font-size: 11px; padding: 8px 12px; box-shadow: 3px 3px 0px black;">VIEW DATA</button>
+      </div>
+      
+      <div class="funnel funnel-hidden" id="leadFunnelContainer">
+        <div class="funnel-stage s1" data-stage="all"><div class="stage-text" id="funnel-total">Total Leads</div></div>
+        <div class="funnel-stage s2" data-stage="1"><div class="stage-text" id="funnel-1">1st Installment Due</div></div>
+        <div class="funnel-stage s3" data-stage="2"><div class="stage-text" id="funnel-2">2nd Installment Due</div></div>
+        <div class="funnel-stage s4" data-stage="3"><div class="stage-text" id="funnel-3">3rd Installment Due</div></div>
+        <div class="funnel-stage s5" data-stage="4"><div class="stage-text" id="funnel-4">4th Installment Due</div></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="content-header">
+        <span id="listTitle">Total Leads</span>
+        <div class="controls">
+          <input id="searchRegno" type="text" placeholder="Search RegNo" maxlength="20">
+          <button class="act-btn" id="btnSearch" style="padding:6px 10px; box-shadow: 2px 2px 0 #000;">Search</button>
+          <button class="act-btn" id="btnOverdue" style="padding:6px 10px; box-shadow: 2px 2px 0 #000; background:#c62828;">OVERDUE LEADS</button>
+          <button class="act-btn" id="btnExport" style="padding:6px 10px; box-shadow: 2px 2px 0 #000; background:#7e57c2;">Download CSV</button>
+          <a class="act-btn" id="btnReports" style="padding:6px 10px; box-shadow: 2px 2px 0 #000; background:#4dd0e1; color:#000;" href="#">Reports</a>
+          <button class="act-btn" id="btnClose" style="padding:6px 10px; box-shadow: 2px 2px 0 #000; background:#777;">X</button>
+        </div>
+      </div>
+      <div class="relative-wrap" style="display:none;">
+        <div class="leads-list" id="leadsList"></div>
+        <div id="spinnerMain" class="loading-overlay" style="display:none;"><div class="spinner"></div></div>
+      </div>
+      <div class="relative-wrap">
+        <div class="leads-list" id="todayView" style="display:none; margin-top:10px;">
+        <div class="content-header" style="margin:-10px -10px 10px -10px; border-radius:5px;">
+  <span>Today</span>
+  <div class="controls" id="counselorInfo">
+    <span id="employeeCodeDisplay" style="font-weight: 600;"></span>
+  </div>
+</div>
+        <div class="controls" style="margin: 0 0 10px 0;">
+<button class="act-btn" id="filterTodayAll" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#777;">All</button>
+<button class="act-btn" id="filterTodayOverdue" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#c62828;">Overdue Followup</button>
+<button class="act-btn" id="filterTodayPrev" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#8f6dd1;">Yesterday's DNP/SO</button>
+<button class="act-btn" id="filterTodaySoon" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#ffc107; color:#333;">Due Soon</button>
+<button class="act-btn" id="filterTodayDnp" style="padding:4px 8px; box-shadow: 2px 2px 0 #000; background:#e62222;">Old DNP/SO</button>
+        </div>
+        <div id="todayLeadsContainer">
+          <div id="no-leads-message" style="display: none; padding: 10px;">No leads to show for this filter.</div>
+          <div id="group-overdue">
+              <h3>Overdue Follow-ups</h3>
+              <div class="leads-list"></div>
+          </div>
+          <div id="group-dnp">
+              <h3>Old DNP/Switch Off</h3>
+              <div class="leads-list"></div>
+          </div>
+          <div id="group-soon">
+              <h3>Due Soon</h3>
+              <div class="leads-list"></div>
+          </div>
+          <div id="group-prev">
+              <h3>Yesterday's DNP/Switch Off</h3>
+              <div class="leads-list"></div>
+          </div>
+          <div id="group-untouched">
+              <h3>Untouched from Yesterday</h3>
+              <div class="leads-list"></div>
+          </div>
+      </div>
+        </div>
+        <div id="spinnerToday" class="loading-overlay" style="display:none;"><div class="spinner"></div></div>
+      </div>
+                    </div>
+                </div>
+  <script>
+    (function(){
+      function getQueryParam(name){
+        var params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
+
+      var loadingBar = document.getElementById('loading-bar');
+
+      function showLoadingBar() {
+          if (loadingBar) { loadingBar.classList.add('show'); }
+      }
+
+      function hideLoadingBar() {
+          if (loadingBar) { loadingBar.classList.remove('show'); }
+      }
+
+      var center = getQueryParam('center') || (sessionStorage.getItem('center') || '');
+      var employeeCode = getQueryParam('employeeCode') || (sessionStorage.getItem('employeeCode') || '');
+      document.getElementById('centreName').textContent = center || 'Centre Name';
+      if (!center || !employeeCode) {
+        window.location.replace('index.html');
+        return;
+      }
+
+      var API_BASE = 'https://script.google.com/macros/s/AKfycbwguUkMt32RtWsIvBODnHo0HZEF-3B8CD0TCdzq8utulDQfQSkUlzX8FUCHZJMwuO6Wow/exec';
+      // New snippet to fetch counselor name and display it with the ID
+(function setCounselorName() {
+  var displayEl = document.getElementById('employeeCodeDisplay');
+  if (!displayEl) return;
+
+  // Set a default value first
+  displayEl.textContent = 'Counselor: ' + employeeCode;
+
+  // Fetch the list of counselors for the center
+  var url = API_BASE + '?action=getcounselors&center=' + encodeURIComponent(center);
+
+  fetch(url)
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+      if (data && data.ok && Array.isArray(data.counselors)) {
+        // Find the current counselor in the returned list
+        var currentCounselor = data.counselors.find(function(c) {
+          return c.employeeId === employeeCode;
+        });
+
+        if (currentCounselor && currentCounselor.name) {
+          // If found, update the display with Name and ID
+          displayEl.textContent = currentCounselor.name + ' (' + employeeCode + ')';
+        }
+      }
+    })
+    .catch(function(error) {
+      console.error("Could not fetch counselor's name:", error);
+      // If there's an error, the display will keep the default value
+    });
+})();
+      var listTitleEl = document.getElementById('listTitle');
+      var leadsListEl = document.getElementById('leadsList');
+      var leadsWrapEl = leadsListEl ? leadsListEl.parentElement : null;
+      var searchRegnoEl = document.getElementById('searchRegno');
+      var btnSearch = document.getElementById('btnSearch');
+      var btnOverdue = document.getElementById('btnOverdue');
+      var btnReports = document.getElementById('btnReports');
+      var btnExport = document.getElementById('btnExport');
+      var btnClose = document.getElementById('btnClose');
+      var funnelIds = {
+        all: document.getElementById('funnel-total'), 1: document.getElementById('funnel-1'),
+        2: document.getElementById('funnel-2'), 3: document.getElementById('funnel-3'), 4: document.getElementById('funnel-4')
+      };
+      var btnSidebarActNow = document.getElementById('btnSidebarActNow');
+      if (btnSidebarActNow) {
+          btnSidebarActNow.addEventListener('click', function() { loadToday(); });
+      }
+      var todayViewEl = document.getElementById('todayView');
+      var todayLeadsContainer = document.getElementById('todayLeadsContainer');
+      var lastTodayData = []; // Will store the master list of all leads.
+      var lastOverdueData = []; // Will store the master list of overdue leads.
+      var currentFilter = 'all'; // Tracks the active filter.
+      // --- END VARIABLE DECLARATIONS ---
+      
+      function showError(msg){
+        if (todayLeadsContainer) {
+            todayLeadsContainer.innerHTML = '<div style="padding:10px;color:#b00020;">'+ msg +'</div>';
+        }
+      }
+
+      function formatCurrency(n){
+        try { return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(n || 0)); } catch(_) { return '₹' + (n || 0); }
+      }
+
+function buildLeadCard(item, showActNowButton){
+  var regno = item.regno || '';
+  var statusInfo = item.currentStatus ? { label: item.currentStatus } : computeStatus(item.DueDate);
+
+  var el = document.createElement('div');
+  el.className = 'lead-item';
+  el.setAttribute('data-regno', String(regno));
+  el.setAttribute('data-categories', (item.categories || []).join(' '));
+
+  var actionButtonHtml = '';
+  if (showActNowButton) {
+    actionButtonHtml = '<button class="act-btn">ACT NOW</button>';
+  }
+
+  el.innerHTML = (
+    '<div class="lead-details-wrapper">'
+    + '<i class="fa fa-user-circle lead-avatar"></i>'
+    + '<div class="lead-info-columns">'
+    +   '<div class="lead-info">'
+    +     '<div><span class="label">Registered Number:</span><strong class="data">'+ (regno || '-') +'</strong></div>'
+    +     '<div><span class="label new-field">Name:</span><strong class="data new-field">'+ (item.name || '-') +'</strong></div>'
+    +     '<div><span class="label new-field">Phone Number:</span><strong class="data new-field">'+ (item.phoneNumber || '-') +'</strong></div>'
+    +     '<div><span class="label">Source:</span><strong class="data">'+ (item.source_name || '-') +'</strong></div>'
+    +     '<div><span class="label">Installment status:</span><strong class="data">'+ (item.Installment_Status || '-') +'</strong></div>'
+    +     '<div><span class="label">Due date:</span><strong class="data">'+ (item.DueDate || '-') +'</strong></div>'
+    +     '<div><span class="label">Current status:</span><strong class="data">'+ statusInfo.label +'</strong></div>'
+    +   '</div>'
+    +   '<div class="lead-info">'
+    +     '<div><span class="label">Total Payable:</span><strong class="data">'+ formatCurrency(item.total_payable_cr) +'</strong></div>'
+    +     '<div><span class="label">Due Amount:</span><strong class="data">'+ formatCurrency(item.AmountDue) +'</strong></div>'
+    +     '<div><span class="label">Total balance:</span><strong class="data">'+ formatCurrency(item.total_balance_cr) +'</strong></div>'
+    +     (item.lastRemark ? '<div><span class="label">Last Remarks:</span><strong class="data">'+ item.lastRemark +'</strong></div>' : '')
+    +     (item.attemptNo ? '<div><span class="label">Attempt:</span><strong class="data">'+ item.attemptNo +'</strong></div>' : '')
+    +     (item.lastActionAt ? '<div><span class="label">Last Action:</span><strong class="data">'+ item.lastActionAt +'</strong></div>' : '')
+    +   '</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="actions-wrapper">'
+    +   actionButtonHtml
+    +   (item.attemptNo ? '<div class="stamp">Attempt '+ item.attemptNo +'</div>' : '')
+    + '</div>'
+  );
+
+  if (showActNowButton) {
+    var actBtn = el.querySelector('.act-btn');
+    actBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleActionMenu(el, regno); });
+  }
+
+  var avatar = el.querySelector('.lead-avatar');
+  if (avatar) {
+      avatar.style.cursor = 'pointer';
+      avatar.setAttribute('title', 'Click to Debug Lead\\nShift+Click to View History');
+      avatar.addEventListener('click', function(e){ 
+          e.stopPropagation(); 
+          if (e.shiftKey) {
+              openHistoryModal(regno);
+          } else {
+              runLeadDebugger(regno);
+          }
+      });
+  }
+  return el;
+}
+
+      function computeStatus(dueDate){
+        if (!dueDate) return { label: '-', kind: '' };
+        var d = new Date(dueDate);
+        if (isNaN(d.getTime())) return { label: '-', kind: '' };
+        var ms = d.setHours(0,0,0,0) - new Date().setHours(0,0,0,0);
+        var days = Math.round(ms / 86400000);
+        if (days < 0) return { label: 'Overdue by ' + Math.abs(days) + ' days', kind: 'overdue' };
+        if (days === 0) return { label: 'Due today', kind: 'tobedue' };
+        return { label: 'To be due in ' + days + ' days', kind: 'tobedue' };
+      }
+
+      // --- NEW DYNAMIC RENDERING FUNCTION ---
+      function renderTodayLeads() {
+    console.log('[DEBUG] renderTodayLeads called. Processing ' + lastTodayData.length + ' leads.', lastTodayData);
+    // Define the containers for each priority group
+    const containers = {
+        overdue: document.querySelector('#group-overdue .leads-list'),
+        dnp: document.querySelector('#group-dnp .leads-list'),  
+        soon: document.querySelector('#group-soon .leads-list'),
+        prev: document.querySelector('#group-prev .leads-list'),
+        untouched: document.querySelector('#group-untouched .leads-list')
+    };
+
+    // Clear all containers before rendering
+    for (const key in containers) {
+        if (containers[key]) {
+            containers[key].innerHTML = '';
+        }
+    }
+
+    const searchQuery = (searchRegnoEl.value || '').trim().toLowerCase();
+    let leadsFound = 0;
+
+    // Filter and group the leads
+    lastTodayData.forEach(function(lead) {
+        const categories = lead.categories || [];
+        let leadPrimaryCategory;
+
+        // Determine if the lead matches the current filter
+        const categoryMatch = (currentFilter === 'all') || categories.includes(currentFilter);
+        
+        if (!categoryMatch) {
+            return; // Skip if it doesn't match the current filter
+        }
+
+        // Determine the primary category for display
+        if (currentFilter === 'all') {
+            // If 'all' is selected, use the highest priority category for display
+            leadPrimaryCategory = ['overdue', 'dnp', 'soon', 'prev', 'untouched'].find(cat => categories.includes(cat));
+        } else {
+            // If a specific filter is selected, that's the primary category for display
+            leadPrimaryCategory = currentFilter;
+        }
+
+        // Check if it matches the search query
+        if (searchQuery) {
+            const regMatch = (lead.regno || '').toLowerCase().includes(searchQuery);
+            const nameMatch = (lead.name || '').toLowerCase().includes(searchQuery);
+            const phoneMatch = (lead.phoneNumber || '').includes(searchQuery);
+            if (!regMatch && !nameMatch && !phoneMatch) {
+                return; // Skip if it doesn't match the search
+            }
+        }
+
+        // If a lead has a primary category and a container for it, add it
+        if (leadPrimaryCategory && containers[leadPrimaryCategory]) {
+            containers[leadPrimaryCategory].appendChild(buildLeadCard(lead, true)); // We pass true to show the button
+            leadsFound++;
+        }
+    });
+    
+    // Show or hide group titles based on whether they have leads
+    for (const key in containers) {
+        const groupEl = document.getElementById(`group-${key}`);
+        if (groupEl) {
+            // Only show the group title if it has leads AND it matches the current filter (or current filter is 'all')
+            const hasLeads = containers[key] && containers[key].children.length > 0;
+            const filterMatch = (currentFilter === 'all') || (key === currentFilter);
+            groupEl.style.display = (hasLeads && filterMatch) ? '' : 'none';
+        }
+    }
+    
+// Show or hide the "no leads" message
+const noLeadsMsg = document.getElementById('no-leads-message');
+if (noLeadsMsg) {
+    noLeadsMsg.textContent = "No leads to show for this filter."; // Reset text
+    noLeadsMsg.style.display = (leadsFound === 0) ? 'block' : 'none';
+}
+}
+
+function loadToday(){
+        var url = API_BASE + '?action=today&center=' + encodeURIComponent(center) + '&employeeCode=' + encodeURIComponent(employeeCode);
+        fetchJSON(url).then(function(data){
+          console.log('[DEBUG] Data received in loadToday:', data);
+          if (!data || !data.sections || !data.sections.allLeads) {
+              showError('Failed to load Today section. The data structure may be incorrect.');
+              return;
+          }
+          
+          var leads = data.sections.allLeads || [];
+          console.log('[DEBUG] Extracted leads array from response:', leads);
+          
+          // --- NEW: CHECK FOR EMPTY LEADS ---
+          if (leads.length === 0) {
+              var noLeadsMsg = document.getElementById('no-leads-message');
+              if (noLeadsMsg) {
+                  noLeadsMsg.textContent = "There is no new lead to work on today.";
+                  noLeadsMsg.style.display = 'block';
+              }
+              // Clear any existing leads from the view
+              const containers = {
+                  overdue: document.querySelector('#group-overdue .leads-list'),
+                  dnp: document.querySelector('#group-dnp .leads-list'),
+                  soon: document.querySelector('#group-soon .leads-list'),
+                  prev: document.querySelector('#group-prev .leads-list'),
+                  untouched: document.querySelector('#group-untouched .leads-list')
+              };
+              for (const key in containers) {
+                  if (containers[key]) containers[key].innerHTML = '';
+                  const groupEl = document.getElementById(`group-${key}`);
+                  if (groupEl) groupEl.style.display = 'none';
+              }
+              todayViewEl.style.display = '';
+              if(leadsWrapEl) leadsWrapEl.style.display = 'none';
+              listTitleEl.textContent = 'Today';
+              lastTodayData = []; // Ensure master list is empty
+              return; // Stop further processing
+          }
+          
+          // --- NEW SORTING LOGIC ---
+          const priorityMap = {
+              'overdue': 1,   // Overdue Followup
+              'dnp': 2,       // Old DNP/SO
+              'soon': 3,      // Due Soon
+              'prev': 4,      // Yesterday's DNP/SO
+              'untouched': 5  // Untouched from Yesterday
+          };
+
+          function getLeadPriority(lead) {
+              if (!lead.categories || lead.categories.length === 0) return 99;
+              let priorities = lead.categories.map(cat => priorityMap[cat] || 99);
+              return Math.min.apply(null, priorities);
+          }
+
+          leads.sort(function(a, b) {
+              var dateA = a.DueDate ? new Date(a.DueDate) : null;
+              var dateB = b.DueDate ? new Date(b.DueDate) : null;
+
+              // Handle cases where one or both dates are missing
+              if (!dateA && !dateB) return 0;
+              if (!dateA) return 1; // Put leads without dates at the end
+              if (!dateB) return -1;
+
+              // Primary sort by date
+              if (dateA.getTime() !== dateB.getTime()) {
+                  return dateA.getTime() - dateB.getTime();
+              }
+
+              // Secondary sort by priority if dates are the same
+              let priorityA = getLeadPriority(a);
+              let priorityB = getLeadPriority(b);
+              return priorityA - priorityB;
+          });
+          // --- END SORTING LOGIC ---
+
+          // Store the now-sorted master list of leads
+          lastTodayData = leads;
+          
+
+
+          // Call the rendering function to display the leads
+          renderTodayLeads();
+          
+          todayViewEl.style.display = '';
+          if(leadsWrapEl) leadsWrapEl.style.display = 'none';
+          listTitleEl.textContent = 'Today';
+
+        }).catch(function(err){ showError('A network error occurred while loading Today data.'); });
+      }
+      function renderLeads(leads){ /* This function is for the old view, can be kept for 'Overdue Leads' button */
+        leadsListEl.innerHTML = '';
+        var visible = leads || [];
+        if (!visible || !visible.length){
+          leadsListEl.innerHTML = '<div style="padding:10px;">No leads to show.</div>';
+          return;
+        }
+        visible.forEach(function(item){
+          leadsListEl.appendChild(buildLeadCard(item, false)); // We pass false to hide the button
+        });
+      }
+
+      function closeAllActionMenus(){
+        document.querySelectorAll('.action-menu').forEach(function(m){ m.parentNode && m.parentNode.removeChild(m); });
+      }
+
+      function toggleActionMenu(containerEl, regno){
+        closeAllActionMenus();
+        var menu = document.createElement('div');
+        menu.className = 'action-menu';
+        var options = ['Already Paid','Not Interested','DNP 1','DNP 2','DNP 3','DNP 4','DNP 5','Switch off','Follow Up Required'];
+        options.forEach(function(opt){
+          var btn = document.createElement('button');
+          btn.textContent = opt;
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            if (opt === 'Follow Up Required') { openFollowUpModal(regno); }
+            else if (opt === 'Switch off' || opt.indexOf('DNP') === 0) { openRemarkModal(regno, opt); }
+            else { submitAction({ regno: regno, action: opt }); }
+            closeAllActionMenus();
+          });
+          menu.appendChild(btn);
+        });
+        containerEl.appendChild(menu);
+        document.addEventListener('click', closeAllActionMenus, { once: true });
+      }
+
+      function openFollowUpModal(regno){
+        var backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = '<h3>Schedule Follow Up</h3>' + '<label for="fudt">Follow-up date & time</label>' + '<input id="fudt" type="datetime-local">' + '<label for="fuRemark">Remark (optional)</label>' + '<input id="fuRemark" type="text" placeholder="Remark" style="width:100%; padding:8px;">' + '<div class="actions">' + '<button class="btn-secondary">Cancel</button>' + '<button class="btn-primary">Save</button>' + '</div>';
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+        var input = modal.querySelector('#fudt');
+        var remarkInput = modal.querySelector('#fuRemark');
+        modal.querySelector('.btn-secondary').addEventListener('click', function(){ document.body.removeChild(backdrop); });
+        modal.querySelector('.btn-primary').addEventListener('click', function(){
+          var dt = (input && input.value) ? new Date(input.value) : null;
+          if (!dt) { input.focus(); return; }
+          submitAction({ regno: regno, action: 'Follow Up Required', followUpAt: dt.toISOString(), remark: (remarkInput && remarkInput.value) || '' });
+          document.body.removeChild(backdrop);
+        });
+      }
+
+      function openRemarkModal(regno, action){
+        var backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = '<h3>'+ action +'</h3>' + '<label for="rk">Remark (optional)</label>' + '<input id="rk" type="text" placeholder="Remark" style="width:100%; padding:8px;">' + '<div class="actions">' + '<button class="btn-secondary">Cancel</button>' + '<button class="btn-primary">Save</button>' + '</div>';
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+        var rk = modal.querySelector('#rk');
+        modal.querySelector('.btn-secondary').addEventListener('click', function(){ document.body.removeChild(backdrop); });
+        modal.querySelector('.btn-primary').addEventListener('click', function(){
+          var remarkVal = (rk && rk.value) || '';
+          submitAction({ regno: regno, action: action, remark: remarkVal });
+          document.body.removeChild(backdrop);
+          showToast(action + ' saved for ' + regno + '.');
+        });
+      }
+
+      function openHistoryModal(regno){
+        var backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.width = '520px';
+        modal.innerHTML = '<h3>History: '+ regno +'</h3>' + '<div id="histBody" style="max-height: 340px; overflow:auto;"><div class="muted">Loading...</div></div>' + '<div class="actions"><button class="btn-primary">Close</button></div>';
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+        modal.querySelector('.btn-primary').addEventListener('click', function(){ document.body.removeChild(backdrop); });
+        var url = API_BASE + '?action=history&center=' + encodeURIComponent(center) + '&regno=' + encodeURIComponent(regno);
+        fetchJSON(url).then(function(data){
+          var hb = modal.querySelector('#histBody');
+          if (!data || !data.ok){ hb.innerHTML = '<div class="muted">No history</div>'; return; }
+          var list = data.history || [];
+          if (!list.length){ hb.innerHTML = '<div class="muted">No history</div>'; return; }
+          hb.innerHTML = '<table style="width:100%; border-collapse:collapse; font-size:12px;">' + '<thead><tr><th style="text-align:left; border-bottom:1px solid #ddd; padding:6px;">When</th><th style="text-align:left; border-bottom:1px solid #ddd; padding:6px;">Action</th><th style="text-align:left; border-bottom:1px solid #ddd; padding:6px;">Remark</th><th style="text-align:left; border-bottom:1px solid #ddd; padding:6px;">By</th></tr></thead><tbody>' + list.map(function(row){ return '<tr><td style="border-bottom:1px solid #f0f0f0; padding:6px;">' + (row.timestampLocal || '-') + '</td><td style="border-bottom:1px solid #f0f0f0; padding:6px;">' + (row.action || '-') + '</td><td style="border-bottom:1px solid #f0f0f0; padding:6px;">' + (row.remark || '-') + '</td><td style="border-bottom:1px solid #f0f0f0; padding:6px;">' + (row.employeeCode || '-') + '</td></tr>'; }).join('') + '</tbody></table>';
+        }).catch(function(){ var hb = modal.querySelector('#histBody'); hb.innerHTML = '<div class="muted">Failed to load history</div>'; });
+      }
+      
+      function showToast(message, type = 'info'){
+        var t = document.createElement('div'); t.className = 'toast'; t.textContent = message;
+        if (type === 'error') { t.style.backgroundColor = '#b00020'; } document.body.appendChild(t);
+        setTimeout(function(){ t.classList.add('show'); }, 10);
+        setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ document.body.removeChild(t); }, 200); }, 2500);
+      }
+
+      function submitAction(payload){
+        var body = { center: center, regno: payload.regno, action: payload.action, followUpAt: payload.followUpAt || '', employeeCode: employeeCode, remark: payload.remark || '' };
+        fetch(API_BASE + '?action=logAction', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+        .then(r => r.json())
+        .then(function(resp) {
+            if (resp && resp.ok) {
+                // Remove the acted-on lead from the live master list and re-render
+                lastTodayData = lastTodayData.filter(lead => String(lead.regno) !== String(payload.regno));
+                renderTodayLeads();
+                showToast('Action saved for ' + payload.regno + '.');
+            } else { showToast('Action failed to save.', 'error'); }
+        }).catch(function(err){ showToast('Network error: Action could not be saved.', 'error'); });
+      }
+
+      function fetchJSON(url){
+        showLoadingBar();
+        console.log('[DEBUG] Fetching URL:', url); // Log the URL being fetched
+        var isToday = url.indexOf('action=today') !== -1;
+        try { (isToday ? (document.getElementById('spinnerToday').style.display='flex') : (document.getElementById('spinnerMain').style.display='flex')); } catch(_) {}
+        return fetch(url, { method: 'GET' })
+          .then(r => r.text())
+          .then(function(text){
+            hideLoadingBar();
+            console.log('[DEBUG] Raw response from backend:', text);
+            try { 
+              var parsed = JSON.parse(text);
+              console.log('[DEBUG] Parsed JSON response:', parsed);
+              return parsed;
+            } catch(e) { 
+              console.error('[DEBUG] Failed to parse JSON:', e, text);
+              return null; 
+            }
+          })
+          .catch(function(err){ 
+            hideLoadingBar(); 
+            console.error('[DEBUG] Network fetch error:', err);
+            throw err; 
+          })
+          .finally(function(){ try { (isToday ? (document.getElementById('spinnerToday').style.display='none') : (document.getElementById('spinnerMain').style.display='none')); } catch(_) {} });
+      }
+
+function runLeadDebugger(regno) {
+  showToast('Running debugger for ' + regno + '...');
+  var url = API_BASE + '?action=debuglead&center=' + encodeURIComponent(center) + '&regno=' + encodeURIComponent(regno) + '&employeeCode=' + encodeURIComponent(employeeCode);
+  fetchJSON(url).then(function(data) {
+    if (data && data.ok) {
+      showDebugModal(data.debug);
+    } else {
+      showToast('Debugger failed: ' + (data.error || 'Unknown error'), 'error');
+    }
+  }).catch(function() { showToast('Debugger network error.', 'error'); });
+}
+
+function showDebugModal(debugInfo) {
+  var backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  var modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.width = '600px';
+  modal.style.textAlign = 'left';
+
+  var content = '<h3>Lead Debugger</h3>';
+  content += '<pre style="white-space: pre-wrap; word-wrap: break-word; background: #f4f4f4; border: 1px solid #ddd; padding: 10px; max-height: 400px; overflow-y: auto;">';
+  content += JSON.stringify(debugInfo, null, 2);
+  content += '</pre>';
+  content += '<div class="actions"><button class="btn-primary">Close</button></div>';
+
+  modal.innerHTML = content;
+  backdrop.appendChild(modal);
+  document.body.appendChild(backdrop);
+  modal.querySelector('.btn-primary').addEventListener('click', function(){ document.body.removeChild(backdrop); });
+}
+
+function refreshFunnel(){
+        if (!API_BASE) { return Promise.resolve(); }
+        var url = API_BASE + '?action=funnel&center=' + encodeURIComponent(center) + '&employeeCode=' + encodeURIComponent(employeeCode);
+        return fetchJSON(url)
+          .then(function(data){
+            if (!data) return;
+            if (funnelIds.all) funnelIds.all.textContent = 'Total Leads (' + (data.total || 0) + ')';
+            if (funnelIds[1]) funnelIds[1].textContent = '1st Installment Due (' + (data.stage1 || 0) + ')';
+            if (funnelIds[2]) funnelIds[2].textContent = '2nd Installment Due (' + (data.stage2 || 0) + ')';
+            if (funnelIds[3]) funnelIds[3].textContent = '3rd Installment Due (' + (data.stage3 || 0) + ')';
+            if (funnelIds[4]) funnelIds[4].textContent = '4th Installment Due (' + (data.stage4 || 0) + ')';
+          }).catch(function(err){ console.error('[Funnel] error', err); });
+      }
+      function loadLeads(stage){}
+      
+      function loadOverdue(){
+    var url = API_BASE + '?action=leads&center=' + encodeURIComponent(center) + '&stage=overdue' + '&employeeCode=' + encodeURIComponent(employeeCode);
+    fetchJSON(url).then(function(data){
+        var list = (Array.isArray(data) ? data : (data && data.data) || []);
+        
+        // --- THIS IS THE NEW LINE ---
+        lastOverdueData = list; // Save the data to our new variable
+
+        if (todayViewEl) todayViewEl.style.display = 'none';
+        if (leadsWrapEl) leadsWrapEl.style.display = '';
+        listTitleEl.textContent = 'Overdue Leads';
+        renderLeads(list);
+    }).catch(function(err){ showError('Failed to load overdue leads'); });
+}
+
+      // --- UPDATED EVENT LISTENERS WITH ACTIVE STATE ---
+const filterButtons = [
+    { id: 'filterTodayAll', filter: 'all' },
+    { id: 'filterTodayOverdue', filter: 'overdue' },
+    { id: 'filterTodayPrev', filter: 'prev' },
+    { id: 'filterTodaySoon', filter: 'soon' },
+    { id: 'filterTodayDnp', filter: 'dnp' }
+];
+
+filterButtons.forEach(buttonInfo => {
+    const buttonEl = document.getElementById(buttonInfo.id);
+    if (buttonEl) {
+        buttonEl.addEventListener('click', function() {
+            // 1. Set the global filter variable
+            currentFilter = buttonInfo.filter;
+
+            // 2. Remove 'filter-active' class from all filter buttons
+            filterButtons.forEach(btn => {
+                const el = document.getElementById(btn.id);
+                if (el) el.classList.remove('filter-active');
+            });
+
+            // 3. Add 'filter-active' class to the button that was just clicked
+            this.classList.add('filter-active');
+
+            // 4. Re-render the leads list with the new filter
+            renderTodayLeads();
+        });
+    }
+});
+
+// Set the "All" button as active by default when the page loads
+document.getElementById('filterTodayAll').classList.add('filter-active');
+
+// Search bar event listeners
+if (btnSearch) btnSearch.addEventListener('click', renderTodayLeads);
+if (searchRegnoEl) searchRegnoEl.addEventListener('keypress', function(e){ if (e.key === 'Enter') { e.preventDefault(); renderTodayLeads(); } });
+if (searchRegnoEl) searchRegnoEl.addEventListener('input', renderTodayLeads);
+      if (btnOverdue) btnOverdue.addEventListener('click', function(){ loadOverdue(); });
+      if (btnReports) btnReports.href = 'reports.html?center=' + encodeURIComponent(center) + '&employeeCode=' + encodeURIComponent(employeeCode);
+      if (btnExport) {
+    btnExport.addEventListener('click', function() {
+        var leadsToExport = [];
+        var fileName = 'leads_export.csv';
+
+        // Check if the "Today's Flow" view is visible
+        if (todayViewEl.style.display !== 'none') {
+            fileName = `today_leads_${center}_${new Date().toISOString().slice(0,10)}.csv`;
+            var searchQuery = (searchRegnoEl.value || '').trim().toLowerCase();
+            
+            leadsToExport = lastTodayData.filter(function(lead) {
+                var categoryMatch = (currentFilter === 'all') || (lead.categories || []).includes(currentFilter);
+                if (!categoryMatch) return false;
+
+                if (searchQuery) {
+                    var regMatch = (lead.regno || '').toLowerCase().includes(searchQuery);
+                    var nameMatch = (lead.name || '').toLowerCase().includes(searchQuery);
+                    var phoneMatch = (lead.phoneNumber || '').includes(searchQuery);
+                    return regMatch || nameMatch || phoneMatch;
+                }
+                return true;
+            });
+        } 
+        // Otherwise, check if the "Overdue Leads" view is active
+        else if (leadsWrapEl.style.display !== 'none') {
+            fileName = `overdue_leads_${center}_${new Date().toISOString().slice(0,10)}.csv`;
+            leadsToExport = lastOverdueData; // Use the data we saved in Step 1
+        }
+
+        if (leadsToExport.length === 0) {
+            showToast("No leads to export for the current view.", "error");
+            return;
+        }
+
+        var rows = [];
+        // Add header row
+        rows.push(['Registered Number', 'Name', 'Phone Number', 'Source', 'Installment Status', 'Due Date', 'Current Status', 'Total Payable', 'Due Amount', 'Total Balance', 'Last Remarks', 'Last Action']);
+
+        // Add data rows
+        leadsToExport.forEach(function(lead){
+            rows.push([
+                lead.regno || '',
+                lead.name || '',
+                lead.phoneNumber || '',
+                lead.source_name || '',
+                lead.Installment_Status || '',
+                lead.DueDate || '',
+                lead.currentStatus || '',
+                lead.total_payable_cr || '0',
+                lead.total_payable_cr || '0',
+                lead.AmountDue || '0',
+                lead.total_balance_cr || '0',
+                lead.lastRemark || '',
+                lead.lastActionAt || ''
+            ]);
+        });
+
+        // Create and download the CSV file
+        var csvContent = "data:text/csv;charset=utf-8," 
+            + rows.map(e => e.map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(",")).join("\n");
+
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+}
+      // --- Funnel Logic (Unchanged) ---
+      var btnViewFunnel = document.getElementById('btnViewFunnel');
+      var leadFunnelContainer = document.getElementById('leadFunnelContainer');
+      var funnelHideTimer;
+      function showFunnel() {
+        leadFunnelContainer.classList.remove('funnel-hidden');
+        clearTimeout(funnelHideTimer);
+        funnelHideTimer = setTimeout(hideFunnel, 60000);
+      }
+      function hideFunnel() {
+        leadFunnelContainer.classList.add('funnel-hidden');
+        clearTimeout(funnelHideTimer);
+      }
+      if (btnViewFunnel) {
+        btnViewFunnel.addEventListener('click', function() {
+          if (leadFunnelContainer.classList.contains('funnel-hidden')) { showFunnel(); } else { hideFunnel(); }
+        });
+      }
+      hideFunnel();
+      // --- End Funnel Logic ---
+
+      // Auto-load today's view by default
+      loadToday();
+      refreshFunnel();
+      setInterval(function(){ if (todayViewEl.style.display !== 'none') { loadToday(); } }, 60000);
+    })();
+  </script>
+</body>
+</html>

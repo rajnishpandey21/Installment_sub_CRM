@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cleanup AssignmentsLog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin:0; font-family:'Poppins', sans-serif; background:#fdfaf6; padding:20px; }
+    .container { max-width:600px; margin:0 auto; }
+    .card { background:#fff; border:2px solid #4b0082; border-radius:8px; box-shadow:6px 6px 0 #000; padding:20px; margin-bottom:20px; }
+    h1 { margin:0 0 20px; font-size:24px; color:#4b0082; }
+    .btn { padding:12px 20px; background:#c23b3b; color:#fff; border:none; font-weight:700; cursor:pointer; border-radius:9999px; margin:10px 5px; box-shadow:none; font-family:'Poppins', sans-serif; }
+    .btn:hover { background:#b03434; }
+    .btn:disabled { background:#e0bebe; cursor:not-allowed; }
+    .status { margin:10px 0; padding:10px; border-radius:5px; }
+    .status.info { background:#e3f2fd; color:#1976d2; }
+    .status.success { background:#e8f5e8; color:#2e7d32; }
+    .status.error { background:#ffebee; color:#c62828; }
+    .center-select { width:100%; padding:10px; border:1px solid #d46a6a; border-radius:6px; font-family:'Poppins', sans-serif; margin-bottom:15px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>AssignmentsLog Cleanup</h1>
+      <p>This tool will remove duplicate entries from the AssignmentsLog sheet.</p>
+      
+      <label for="center">Select Center:</label>
+      <select id="center" class="center-select">
+        <option value="">Loading centers...</option>
+      </select>
+      
+      <div>
+        <button class="btn" id="btnCheck">Check for Duplicates</button>
+        <button class="btn" id="btnCleanup" disabled>Remove Duplicates</button>
+      </div>
+      
+      <div id="status"></div>
+    </div>
+  </div>
+
+  <script>
+         var API_BASE = 'https://script.google.com/macros/s/AKfycbzzC05eleGZ_ya4XmgbZGF7b10o9U6VuWQO_ZQMorLTR4Xl4r82t-2bHHhnCOrXmv7Y/exec';
+        function setStatus(msg, type) {
+      var el = document.getElementById('status');
+      el.innerHTML = '<div class="status ' + (type || 'info') + '">' + msg + '</div>';
+    }
+    
+    function loadCenters() {
+      fetch(API_BASE + '?action=centers')
+        .then(r => r.json())
+        .then(list => {
+          var sel = document.getElementById('center');
+          sel.innerHTML = '<option value="">Select Center</option>' + 
+            (list || []).map(c => '<option>' + c + '</option>').join('');
+        })
+        .catch(err => setStatus('Failed to load centers: ' + err.message, 'error'));
+    }
+    
+    function checkDuplicates() {
+      var center = document.getElementById('center').value;
+      if (!center) {
+        setStatus('Please select a center', 'error');
+        return;
+      }
+      
+      setStatus('Checking for duplicates...', 'info');
+      
+      fetch(API_BASE + '?action=debug&center=' + encodeURIComponent(center))
+        .then(r => r.json())
+        .then(data => {
+          if (!data.ok) {
+            setStatus('Error: ' + (data.error || 'Unknown error'), 'error');
+            return;
+          }
+          
+          var info = data.assignmentsSheet;
+          var msg = 'Sheet Info:<br>' +
+            'Total rows: ' + info.rowCount + '<br>' +
+            'Duplicate entries: ' + info.duplicateCount + '<br>' +
+            'Unique entries: ' + info.uniqueCount + '<br>' +
+            'Center assignments: ' + info.centerAssignments;
+          
+          setStatus(msg, info.duplicateCount > 0 ? 'error' : 'success');
+          
+          if (info.duplicateCount > 0) {
+            document.getElementById('btnCleanup').disabled = false;
+          }
+        })
+        .catch(err => setStatus('Error checking duplicates: ' + err.message, 'error'));
+    }
+    
+    function cleanupDuplicates() {
+      var center = document.getElementById('center').value;
+      if (!center) {
+        setStatus('Please select a center', 'error');
+        return;
+      }
+      
+      if (!confirm('This will permanently remove duplicate entries from AssignmentsLog. Continue?')) {
+        return;
+      }
+      
+      setStatus('Removing duplicates...', 'info');
+      document.getElementById('btnCleanup').disabled = true;
+      
+      fetch(API_BASE + '?action=cleanup&center=' + encodeURIComponent(center))
+        .then(r => r.json())
+        .then(data => {
+          if (!data.ok) {
+            setStatus('Error: ' + (data.error || 'Unknown error'), 'error');
+            return;
+          }
+          
+          var msg = 'Cleanup completed!<br>' +
+            'Removed duplicates: ' + data.removedDuplicates + '<br>' +
+            'Remaining entries: ' + data.remainingRows;
+          
+          setStatus(msg, 'success');
+          document.getElementById('btnCleanup').disabled = true;
+        })
+        .catch(err => setStatus('Error during cleanup: ' + err.message, 'error'));
+    }
+    
+    window.addEventListener('DOMContentLoaded', function() {
+      loadCenters();
+      document.getElementById('btnCheck').addEventListener('click', checkDuplicates);
+      document.getElementById('btnCleanup').addEventListener('click', cleanupDuplicates);
+    });
+  </script>
+</body>
+</html>

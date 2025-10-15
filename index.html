@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Login</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* Loading Bar CSS */
+        #loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: black;
+            z-index: 9999;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-out;
+        }
+        #loading-bar.show {
+            transform: translateX(0);
+        }
+
+        :root {
+            --primary-yellow: #FFC107;
+            --white: #FFFFFF;
+            --text-dark: #212121;
+            --text-light-grey: #616161;
+            --input-border: #E0E0E0;
+            --dark-icon: #333333;
+            --panel-width: clamp(280px, 24vw, 375px);
+            --panel-gap: 2.5vw;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--white);
+            overflow: hidden;
+        }
+
+        .bg-split {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: calc(50vw - (var(--panel-width) + var(--panel-gap)) / 2);
+            background: #1434A4; /* Royal blue */
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--panel-gap);
+            width: 100%;
+        }
+
+        .panel {
+        
+            width: var(--panel-width);
+            height: clamp(480px, 74vh, 620px);
+
+            border-radius: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2vh 30px; /* Reduced vertical padding */
+            overflow: hidden;
+        }
+
+        .left-panel {
+            background-color: var(--white);
+            transform: translateY(-30px);
+        }
+
+        .right-panel {
+            background-color: #1434A4; /* Royal blue */
+            transform: translateY(30px);
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 1.5vh; /* Reduced margin */
+        }
+
+        h1 {
+            font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+            font-weight: 500;
+            color: var(--text-light-grey);
+        }
+
+        .brand-name {
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(2.5rem, 4vw, 3rem);
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin-bottom: 2vh; /* Reduced margin */
+        }
+
+        .splash-image {
+            width: 70%;
+            height: auto;
+            margin: 1.5vh 0; /* Reduced margin */
+        }
+
+        .left-panel .subtext {
+            font-size: clamp(1rem, 1.2vw, 1.1rem);
+            color: var(--text-dark);
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.4;
+            margin-top: 1.5vh; /* Reduced margin */
+        }
+
+        .food-icon {
+            width: clamp(60px, 5vw, 80px);
+            height: auto;
+            margin-bottom: 2vh;
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .right-panel .subtext {
+            font-size: clamp(0.9rem, 1vw, 1rem);
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 3vh; /* Reduced margin */
+        }
+
+        /* Overlay only on the white canvas (not on the royal-blue strip) */
+        :root { --overlay-opacity: 0.18; }
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            /* Start exactly where the white canvas begins (mirrors .bg-split width) */
+            left: calc(50vw - (var(--panel-width) + var(--panel-gap)) / 2);
+            right: 0;
+            z-index: -1; /* behind all content, above the blue strip */
+            pointer-events: none; /* purely decorative */
+            opacity: var(--overlay-opacity);
+            background: url('BACKGROUND_OVERLAY.svg') center center / cover no-repeat;
+        }
+        @media (max-width: 768px){
+            .bg-overlay{ left: 0; }
+        }
+
+        .login-form {
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .input-group {
+            width: 100%;
+            margin-bottom: 2vh; /* Reduced margin */
+        }
+        
+        .input-field {
+            position: relative;
+        }
+
+        .input-field i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-icon);
+        }
+
+        .input-field input {
+            width: 100%;
+            background: var(--white);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 15px 15px 45px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Style the center select to match inputs */
+        .input-field select {
+            width: 100%;
+            background: var(--white);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 45px 15px 45px; /* room for icon and caret */
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .input-field.has-select::after {
+            content: '\f078'; /* FontAwesome chevron-down */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-icon);
+            pointer-events: none;
+        }
+
+        .input-field input::placeholder {
+            color: var(--text-light-grey);
+        }
+
+        .input-field input:focus {
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1vh;
+            align-self: flex-start;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-group label {
+            font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+            color: var(--text-dark);
+            position: relative;
+            padding-left: 28px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 1px;
+            width: 18px;
+            height: 18px;
+            background: var(--white);
+            border: 1px solid var(--input-border);
+            border-radius: 5px;
+        }
+
+        .checkbox-group input[type="checkbox"]:checked + label::before {
+            background-color: var(--text-dark);
+            border-color: var(--text-dark);
+        }
+
+        .checkbox-group label::after {
+            content: '\f00c';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 3px;
+            top: 1px;
+            font-size: 12px;
+            color: var(--primary-yellow);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .checkbox-group input[type="checkbox"]:checked + label::after {
+            opacity: 1;
+        }
+
+        .nav-button {
+            position: absolute;
+            bottom: 3vh; /* Reduced position from bottom */
+            width: clamp(50px, 4vw, 60px);
+            height: clamp(50px, 4vw, 60px);
+            background-color: #FFC107 !important; /* Gold accent */
+            border: none;
+            border-radius: 9999px; /* Fully rounded */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #111111 !important;
+            font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            transition: transform 0.08s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .right-panel .nav-button { background-color: #FFC107 !important; color: #111111 !important; }
+        
+        .nav-button:hover { background-color: #E0AB06 !important; transform: translateY(-1px); }
+        
+        .nav-button:active { background-color: #C99705 !important; transform: translateY(0); }
+
+        .error-text {
+            color: #b00020;
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+        .right-panel h2 { color: #ffffff; }  /* or your desired color */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="panel left-panel">
+            <div class="header">
+                <h1>Welcome to</h1>
+                <span class="brand-name">Portal</span>
+            </div>
+            <img src="left.png" alt="Illustration of a boy reading" class="splash-image">
+            <p class="subtext">Unlock your Potential!<br> Log in now!, Let's Go!</p>
+            <button class="nav-button">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="panel right-panel">
+            <img src="right.png" alt="Tree icon" class="food-icon">
+            <h2>Welcome!</h2>
+            <p class="subtext">Sign in to Continue</p>
+            <form action="#" class="login-form">
+                <div class="input-group">
+                    <div class="input-field has-select">
+                        <i class="fas fa-building"></i>
+                        <select id="center" name="center" aria-label="Select Center" required>
+                            <option value="" selected disabled>Select Your Center</option>
+                            <option>Agra Government</option>
+                            <option>Bhopal Government</option>
+                            <option>Bhubaneswar Government</option>
+                            <option>Delhi Government</option>
+                            <option>Indore Government</option>
+                            <option>Jaipur Government-Gopalpura</option>
+                            <option>Kolkata Government</option>
+                            <option>Lucknow Government</option>
+                            <option>Patna Government</option>
+                            <option>Prayagraj Government-Katra</option>
+                            <option>Ranchi Government - Lalpur</option>
+                            <option>Siliguri Government</option>
+                            <option>Varanasi Government - Durgakund</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="centerError" class="error-text" aria-live="polite"></div>
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-id-badge"></i>
+                        <input type="text" id="employeeCode" name="employeeCode" placeholder="Employee Code" autocomplete="username" required>
+                    </div>
+                </div>
+                <div id="employeeError" class="error-text" aria-live="polite"></div>
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Password" required autocomplete="current-password">
+                    </div>
+                </div>
+                <div id="passwordError" class="error-text" aria-live="polite"></div>
+            </form>
+            <button class="nav-button">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="bg-split"></div>
+    <div class="bg-overlay"></div>
+    <div id="loading-bar"></div>
+
+    <script>
+        (function () {
+            var API_BASE = 'https://script.google.com/macros/s/AKfycbwguUkMt32RtWsIvBODnHo0HZEF-3B8CD0TCdzq8utulDQfQSkUlzX8FUCHZJMwuO6Wow/exec';
+
+            var loadingBar = document.getElementById('loading-bar');
+
+            function showLoadingBar() {
+                if (loadingBar) {
+                    loadingBar.classList.add('show');
+                }
+            }
+
+            function hideLoadingBar() {
+                if (loadingBar) {
+                    loadingBar.classList.remove('show');
+                }
+            }
+
+            // Force uppercase and restrict to A-Z and 0-9 for employee code
+            var field = document.getElementById('employeeCode');
+            if (field) {
+                var toUpperAlnum = function () {
+                    var start = field.selectionStart;
+                    var end = field.selectionEnd;
+                    field.value = field.value
+                        .toUpperCase()
+                        .replace(/[^A-Z0-9]/g, '')
+                        .slice(0, 7);
+                    // restore caret position
+                    try { field.setSelectionRange(start, end); } catch (_) {}
+                };
+                field.addEventListener('input', toUpperAlnum);
+                field.addEventListener('blur', toUpperAlnum);
+                field.addEventListener('paste', function () { setTimeout(toUpperAlnum, 0); });
+            }
+
+            // Form validation: employee code and passwords
+            var form = document.querySelector('.right-panel .login-form');
+            var btn = document.querySelector('.right-panel .nav-button');
+            var password = document.getElementById('password');
+            var passwordError = document.getElementById('passwordError');
+            var employee = document.getElementById('employeeCode');
+            var employeeError = document.getElementById('employeeError');
+            var center = document.getElementById('center');
+            var centerError = document.getElementById('centerError');
+
+            function validateForm() {
+                var ok = true;
+                if (center) {
+                    centerError.textContent = '';
+                    if (!center.value) {
+                        centerError.textContent = 'Please select your center.';
+                        if (ok) center.focus();
+                        ok = false;
+                    }
+                }
+
+                if (employee) {
+                    employeeError.textContent = '';
+                    var code = (employee.value || '').trim();
+                    // Client-side validation: only check for non-empty
+                    if (!code) {
+                      employeeError.textContent = 'Employee code is required.';
+                      if (ok) employee.focus();
+                      ok = false;
+                    }
+                }
+
+                if (password) {
+                    passwordError.textContent = '';
+                    if (password.value.trim().length === 0) {
+                        passwordError.textContent = 'Please enter your password.';
+                        if (ok) password.focus();
+                        ok = false;
+                    }
+                }
+                return ok; // Return validation status for server login
+            }
+
+            // Client-side login logic using fetch
+            function doLogin() {
+                if (!validateForm()) return;
+
+                showLoadingBar(); // Show loading bar
+
+                var chosenCenter = center.value;
+                var employeeCodeVal = employee.value.trim();
+                var passwordVal = password.value.trim();
+                
+                passwordError.textContent = ''; // Clear previous errors
+
+                console.log('Login Attempt:', {
+                  center: chosenCenter,
+                  employeeCode: employeeCodeVal,
+                  passwordPresent: !!passwordVal // Check if password value exists
+                });
+
+                // Send plain-text password to backend
+                var url = API_BASE + '?action=login&center=' + encodeURIComponent(chosenCenter) + '&employeeCode=' + encodeURIComponent(employeeCodeVal) + '&password=' + encodeURIComponent(passwordVal);
+                fetch(url).then(function(r){ return r.json();
+                }).then(function(resp){
+                    hideLoadingBar(); // Hide loading bar
+                    // Log backend debug info
+                    console.log('[Frontend:doLogin] Backend Debug Info:', resp.debug);
+
+                    if (!resp || !resp.ok){
+                        passwordError.textContent = resp && resp.error ? resp.error : 'Invalid login';
+                        password.focus();
+                        return;
+                    }
+                    // Store actual normalized employeeCode from backend if available
+                    var finalEmployeeCode = resp.employeeCode || employeeCodeVal;
+                    try {
+                        sessionStorage.setItem('center', chosenCenter);
+                        sessionStorage.setItem('employeeCode', finalEmployeeCode);
+                    } catch (_) {}
+                    window.location.replace('detail.html?center=' + encodeURIComponent(chosenCenter) + '&employeeCode=' + encodeURIComponent(finalEmployeeCode));
+                }).catch(function(err){
+                    hideLoadingBar(); // Hide loading bar on error
+                    passwordError.textContent = 'Login error. Please try again.';
+                    console.error(err);
+                });
+            }
+
+            if (form) {
+                form.addEventListener('submit', function (e) { e.preventDefault(); doLogin(); });
+            }
+            if (btn) {
+                btn.addEventListener('click', function (e) { e.preventDefault(); doLogin(); });
+            }
+        })();
+    </script>
+
+</body>
+</html>
