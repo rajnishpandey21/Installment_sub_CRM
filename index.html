@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Login</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -24,6 +26,7 @@
             transform: translateX(-100%);
             transition: transform 0.3s ease-out;
         }
+
         #loading-bar.show {
             transform: translateX(0);
         }
@@ -61,7 +64,8 @@
             top: 0;
             height: 100vh;
             width: calc(50vw - (var(--panel-width) + var(--panel-gap)) / 2);
-            background: #1434A4; /* Royal blue */
+            background: #1434A4;
+            /* Royal blue */
             z-index: -1;
             pointer-events: none;
         }
@@ -75,7 +79,7 @@
         }
 
         .panel {
-        
+
             width: var(--panel-width);
             height: clamp(480px, 74vh, 620px);
 
@@ -85,7 +89,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2vh 30px; /* Reduced vertical padding */
+            padding: 2vh 30px;
+            /* Reduced vertical padding */
             overflow: hidden;
         }
 
@@ -95,13 +100,15 @@
         }
 
         .right-panel {
-            background-color: #1434A4; /* Royal blue */
+            background-color: #1434A4;
+            /* Royal blue */
             transform: translateY(30px);
         }
 
         .header {
             text-align: center;
-            margin-top: 1.5vh; /* Reduced margin */
+            margin-top: 1.5vh;
+            /* Reduced margin */
         }
 
         h1 {
@@ -115,13 +122,15 @@
             font-size: clamp(2.5rem, 4vw, 3rem);
             color: var(--text-dark);
             line-height: 1.2;
-            margin-bottom: 2vh; /* Reduced margin */
+            margin-bottom: 2vh;
+            /* Reduced margin */
         }
 
         .splash-image {
             width: 70%;
             height: auto;
-            margin: 1.5vh 0; /* Reduced margin */
+            margin: 1.5vh 0;
+            /* Reduced margin */
         }
 
         .left-panel .subtext {
@@ -130,7 +139,8 @@
             font-weight: 500;
             text-align: center;
             line-height: 1.4;
-            margin-top: 1.5vh; /* Reduced margin */
+            margin-top: 1.5vh;
+            /* Reduced margin */
         }
 
         .food-icon {
@@ -149,11 +159,15 @@
             font-size: clamp(0.9rem, 1vw, 1rem);
             font-weight: 500;
             color: #ffffff;
-            margin-bottom: 3vh; /* Reduced margin */
+            margin-bottom: 3vh;
+            /* Reduced margin */
         }
 
         /* Overlay only on the white canvas (not on the royal-blue strip) */
-        :root { --overlay-opacity: 0.18; }
+        :root {
+            --overlay-opacity: 0.18;
+        }
+
         .bg-overlay {
             position: fixed;
             top: 0;
@@ -161,13 +175,18 @@
             /* Start exactly where the white canvas begins (mirrors .bg-split width) */
             left: calc(50vw - (var(--panel-width) + var(--panel-gap)) / 2);
             right: 0;
-            z-index: -1; /* behind all content, above the blue strip */
-            pointer-events: none; /* purely decorative */
+            z-index: -1;
+            /* behind all content, above the blue strip */
+            pointer-events: none;
+            /* purely decorative */
             opacity: var(--overlay-opacity);
             background: url('BACKGROUND_OVERLAY.svg') center center / cover no-repeat;
         }
-        @media (max-width: 768px){
-            .bg-overlay{ left: 0; }
+
+        @media (max-width: 768px) {
+            .bg-overlay {
+                left: 0;
+            }
         }
 
         .login-form {
@@ -177,9 +196,10 @@
 
         .input-group {
             width: 100%;
-            margin-bottom: 2vh; /* Reduced margin */
+            margin-bottom: 2vh;
+            /* Reduced margin */
         }
-        
+
         .input-field {
             position: relative;
         }
@@ -202,7 +222,7 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-dark);
             outline: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         /* Style the center select to match inputs */
@@ -211,19 +231,21 @@
             background: var(--white);
             border: none;
             border-radius: 12px;
-            padding: 15px 45px 15px 45px; /* room for icon and caret */
+            padding: 15px 45px 15px 45px;
+            /* room for icon and caret */
             font-size: 1rem;
             font-family: 'Poppins', sans-serif;
             color: var(--text-dark);
             outline: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
         }
 
         .input-field.has-select::after {
-            content: '\f078'; /* FontAwesome chevron-down */
+            content: '\f078';
+            /* FontAwesome chevron-down */
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             position: absolute;
@@ -241,7 +263,7 @@
         .input-field input:focus {
             box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
         }
-        
+
         .checkbox-group {
             display: flex;
             align-items: center;
@@ -274,7 +296,7 @@
             border-radius: 5px;
         }
 
-        .checkbox-group input[type="checkbox"]:checked + label::before {
+        .checkbox-group input[type="checkbox"]:checked+label::before {
             background-color: var(--text-dark);
             border-color: var(--text-dark);
         }
@@ -291,44 +313,62 @@
             opacity: 0;
             transition: opacity 0.2s;
         }
-        
-        .checkbox-group input[type="checkbox"]:checked + label::after {
+
+        .checkbox-group input[type="checkbox"]:checked+label::after {
             opacity: 1;
         }
 
         .nav-button {
             position: absolute;
-            bottom: 3vh; /* Reduced position from bottom */
+            bottom: 3vh;
+            /* Reduced position from bottom */
             width: clamp(50px, 4vw, 60px);
             height: clamp(50px, 4vw, 60px);
-            background-color: #FFC107 !important; /* Gold accent */
+            background-color: #FFC107 !important;
+            /* Gold accent */
             border: none;
-            border-radius: 9999px; /* Fully rounded */
+            border-radius: 9999px;
+            /* Fully rounded */
             display: flex;
             justify-content: center;
             align-items: center;
             color: #111111 !important;
             font-size: clamp(1.2rem, 1.5vw, 1.5rem);
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
             transition: transform 0.08s ease, background-color 0.15s ease, box-shadow 0.15s ease;
             font-family: 'Poppins', sans-serif;
         }
 
-        .right-panel .nav-button { background-color: #FFC107 !important; color: #111111 !important; }
-        
-        .nav-button:hover { background-color: #E0AB06 !important; transform: translateY(-1px); }
-        
-        .nav-button:active { background-color: #C99705 !important; transform: translateY(0); }
+        .right-panel .nav-button {
+            background-color: #FFC107 !important;
+            color: #111111 !important;
+        }
+
+        .nav-button:hover {
+            background-color: #E0AB06 !important;
+            transform: translateY(-1px);
+        }
+
+        .nav-button:active {
+            background-color: #C99705 !important;
+            transform: translateY(0);
+        }
 
         .error-text {
             color: #b00020;
             font-size: 0.85rem;
             margin-top: 6px;
         }
-        .right-panel h2 { color: #ffffff; }  /* or your desired color */
+
+        .right-panel h2 {
+            color: #ffffff;
+        }
+
+        /* or your desired color */
     </style>
 </head>
+
 <body>
 
     <div class="container">
@@ -374,14 +414,16 @@
                 <div class="input-group">
                     <div class="input-field">
                         <i class="fas fa-id-badge"></i>
-                        <input type="text" id="employeeCode" name="employeeCode" placeholder="Employee Code" autocomplete="username" required>
+                        <input type="text" id="employeeCode" name="employeeCode" placeholder="Employee Code"
+                            autocomplete="username" required>
                     </div>
                 </div>
                 <div id="employeeError" class="error-text" aria-live="polite"></div>
                 <div class="input-group">
                     <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" placeholder="Password" required autocomplete="current-password">
+                        <input type="password" id="password" name="password" placeholder="Password" required
+                            autocomplete="current-password">
                     </div>
                 </div>
                 <div id="passwordError" class="error-text" aria-live="polite"></div>
@@ -425,7 +467,7 @@
                         .replace(/[^A-Z0-9]/g, '')
                         .slice(0, 7);
                     // restore caret position
-                    try { field.setSelectionRange(start, end); } catch (_) {}
+                    try { field.setSelectionRange(start, end); } catch (_) { }
                 };
                 field.addEventListener('input', toUpperAlnum);
                 field.addEventListener('blur', toUpperAlnum);
@@ -458,9 +500,9 @@
                     var code = (employee.value || '').trim();
                     // Client-side validation: only check for non-empty
                     if (!code) {
-                      employeeError.textContent = 'Employee code is required.';
-                      if (ok) employee.focus();
-                      ok = false;
+                        employeeError.textContent = 'Employee code is required.';
+                        if (ok) employee.focus();
+                        ok = false;
                     }
                 }
 
@@ -484,24 +526,25 @@
                 var chosenCenter = center.value;
                 var employeeCodeVal = employee.value.trim();
                 var passwordVal = password.value.trim();
-                
+
                 passwordError.textContent = ''; // Clear previous errors
 
                 console.log('Login Attempt:', {
-                  center: chosenCenter,
-                  employeeCode: employeeCodeVal,
-                  passwordPresent: !!passwordVal // Check if password value exists
+                    center: chosenCenter,
+                    employeeCode: employeeCodeVal,
+                    passwordPresent: !!passwordVal // Check if password value exists
                 });
 
                 // Send plain-text password to backend
                 var url = API_BASE + '?action=login&center=' + encodeURIComponent(chosenCenter) + '&employeeCode=' + encodeURIComponent(employeeCodeVal) + '&password=' + encodeURIComponent(passwordVal);
-                fetch(url).then(function(r){ return r.json();
-                }).then(function(resp){
+                fetch(url).then(function (r) {
+                    return r.json();
+                }).then(function (resp) {
                     hideLoadingBar(); // Hide loading bar
                     // Log backend debug info
                     console.log('[Frontend:doLogin] Backend Debug Info:', resp.debug);
 
-                    if (!resp || !resp.ok){
+                    if (!resp || !resp.ok) {
                         passwordError.textContent = resp && resp.error ? resp.error : 'Invalid login';
                         password.focus();
                         return;
@@ -511,9 +554,10 @@
                     try {
                         sessionStorage.setItem('center', chosenCenter);
                         sessionStorage.setItem('employeeCode', finalEmployeeCode);
-                    } catch (_) {}
+                        sessionStorage.setItem('loginTimestamp', Date.now().toString());
+                    } catch (_) { }
                     window.location.replace('detail.html?center=' + encodeURIComponent(chosenCenter) + '&employeeCode=' + encodeURIComponent(finalEmployeeCode));
-                }).catch(function(err){
+                }).catch(function (err) {
                     hideLoadingBar(); // Hide loading bar on error
                     passwordError.textContent = 'Login error. Please try again.';
                     console.error(err);
@@ -530,4 +574,5 @@
     </script>
 
 </body>
+
 </html>
