@@ -1492,7 +1492,7 @@
       // Auto-load today's view by default
       loadToday();
       refreshFunnel();
-      setInterval(function () { if (todayViewEl.style.display !== 'none') { loadToday(); } }, 60000);
+      setInterval(function () { if (todayViewEl.style.display !== 'none') { loadToday(); } }, 900000); // 15 minutes
     })();
   </script>
 </body>
